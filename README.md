@@ -17,3 +17,10 @@ Set the live values in `config.js` for:
 The quiz still completes when these values are empty, but no lead destination or analytics integration is activated.
 
 Generated image assets are stored locally in `assets/`; no remote stock-photo dependency is used.
+
+## Deployment
+
+- GitHub: https://github.com/sidbhand-jpg/client-elite-glass-window-quiz
+- Cloudflare Pages: https://client-elite-glass-window-quiz.pages.dev
+
+Cloudflare Pages is connected to the `main` branch and automatically deploys new pushes.
