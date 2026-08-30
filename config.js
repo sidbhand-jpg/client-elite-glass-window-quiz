@@ -160,7 +160,7 @@ window.CONFIG = {
 
   thankYou: {
     headline: "Your request is in!",
-    body: "Elite Glass & Window received your project details and will be in touch within 1 business day.",
+    body: "Be on the lookout for a call from our team in the next few minutes.",
     callPrompt: "Prefer to talk now? Call us:",
     callLabel: "Call (425) 890-8233"
   },
