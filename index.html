@@ -1118,6 +1118,7 @@
     const FORM_STEP   = totalQuestions + 1;
     const THANKS_STEP = totalQuestions + 2;
     const answers     = {};
+    const trackedClaritySteps = new Set();
 
     // ── 8a. Hash map ─────────────────────────────────────────
     function stepToHash(step) {
@@ -1139,8 +1140,17 @@
     // ── 8b. Per-step tracking ─────────────────────────────────
     function trackStep(step) {
       const label = stepToHash(step).replace('#', '');
-      // Clarity custom event for per-step funnel reporting
-      if (window.clarity) window.clarity('set', 'funnelStep', label);
+      const clarityEventName = `quiz_${label.replace(/-/g, '_')}`;
+
+      // Keep the current step as a recording filter and emit one funnel event
+      // per screen. The Set prevents browser-back navigation from double firing.
+      if (window.clarity) {
+        window.clarity('set', 'funnelStep', label);
+        if (!trackedClaritySteps.has(clarityEventName)) {
+          window.clarity('event', clarityEventName);
+          trackedClaritySteps.add(clarityEventName);
+        }
+      }
       // FunnelStep custom pixel event (non-standard, safe to fire on every step)
       // Note: fbq('track', 'Lead') is fired in handleSubmit with a deduplication
       // eventID so it is intentionally NOT fired here on THANKS_STEP.
@@ -1527,6 +1537,15 @@
 
     // ── 12. Boot ─────────────────────────────────────────────
     // Always start on lander — quiz is launched via CTA button
+    // Record the assigned A/B path first, followed by the landing screen.
+    // These queued calls are safe while the async Clarity script is loading.
+    if (window.clarity) {
+      window.clarity('event', `quiz_path_${funnelVariant}`);
+      window.clarity('set', 'funnelStep', 'start');
+      window.clarity('event', 'quiz_start');
+      trackedClaritySteps.add('quiz_start');
+    }
+
     window.location.hash = '#start';
 
   })();
