@@ -166,7 +166,7 @@ window.CONFIG = {
   },
 
   // Add live values before launch. Empty values safely disable these integrations.
-  clarityId: "",
+  clarityId: "yadrhyi60g",
   metaPixelId: "",
   webhookUrl: "",
   smsConsentText: "I agree to receive SMS messages from {businessName} about my estimate request. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
