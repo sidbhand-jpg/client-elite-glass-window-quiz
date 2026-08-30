@@ -96,7 +96,7 @@ Edit `config.js` to change project content. The main sections are:
 | Business fields | Name, phone, hours, tagline, and logo |
 | `colors` | Brand palette and page surfaces |
 | `lander` | Hero copy, trust points, CTA, and hero image |
-| `gallery` | Project categories and local image assets |
+| `gallery` | Completed company projects, locations, and local image assets |
 | `reviews` | Google rating, review count, and displayed testimonials |
 | `questions` | Quiz questions, answer choices, icons, and images |
 | `form` | Contact-form copy and fields |
@@ -123,7 +123,7 @@ colors: {
 
 ### Local Image Assets
 
-All funnel imagery is stored in `assets/`; there is no remote stock-photo dependency. When replacing an image, keep the same filename or update its matching path and alt text in `config.js`.
+All funnel imagery is stored in `assets/`; there is no remote stock-photo dependency. The landing-page slider uses verified Elite Glass & Window case-study photos under `assets/projects/`. When replacing an image, keep the same filename or update its matching path and alt text in `config.js`.
 
 Question options support two layouts:
 

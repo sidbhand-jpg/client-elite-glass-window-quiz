@@ -39,14 +39,16 @@ window.CONFIG = {
   },
 
   gallery: {
-    eyebrow: "Recent project inspiration",
-    headline: "See What Is Possible for Your Space",
-    subheadline: "Explore the types of custom glass and window projects our team can help you plan.",
+    eyebrow: "Recent projects",
+    headline: "See Our Work Around Greater Seattle",
+    subheadline: "Browse completed projects by the Elite Glass & Window team.",
     items: [
-      { title: "Window Replacement", image: "/assets/window-replacement.png", alt: "Bright home interior with replacement windows" },
-      { title: "Shower Enclosures", image: "/assets/shower-enclosure.png", alt: "Modern custom glass shower enclosure" },
-      { title: "Custom Glass & Mirrors", image: "/assets/custom-glass-mirror.png", alt: "Custom glass and mirror installation" },
-      { title: "Railings & Storefronts", image: "/assets/glass-railing-storefront.png", alt: "Architectural glass railing and storefront work" }
+      { title: "Frameless Shower Door", location: "Bellevue, WA", image: "/assets/projects/project_1.jpg", alt: "Elite Glass & Window frameless shower door installation in Bellevue" },
+      { title: "Front Door Replacement", location: "Bothell, WA", image: "/assets/projects/frontdoor_main.jpg", alt: "Elite Glass & Window front door replacement in Bothell" },
+      { title: "Glass Staircase Railing", location: "Medina, WA", image: "/assets/projects/stair_medina_main.jpg", alt: "Elite Glass & Window glass staircase railing replacement in Medina" },
+      { title: "Whole-Home Window Replacement", location: "Redmond, WA", image: "/assets/projects/window_redmond_main.jpg", alt: "Elite Glass & Window home window replacement in Redmond" },
+      { title: "Custom Wall Mirror", location: "Kirkland, WA", image: "/assets/projects/mirror_kirkland_main.jpg", alt: "Elite Glass & Window custom wall mirror installation in Kirkland" },
+      { title: "Sliding Patio Door", location: "Redmond, WA", image: "/assets/projects/patiodoor_redmond_main.jpg", alt: "Elite Glass & Window sliding patio door installation in Redmond" }
     ]
   },
 

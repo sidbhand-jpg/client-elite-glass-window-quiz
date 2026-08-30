@@ -318,21 +318,42 @@
       line-height: 1.15; margin-bottom: 12px;
     }
     .section-copy { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .gallery-card {
-      position: relative; min-height: 270px; border-radius: 18px; overflow: hidden;
-      background: #dceaf5; box-shadow: var(--shadow);
+    .gallery-carousel { position: relative; }
+    .gallery-viewport {
+      overflow: hidden; border-radius: 20px; background: #dceaf5; box-shadow: var(--shadow);
+      touch-action: pan-y; cursor: grab;
     }
-    .gallery-card img { width: 100%; height: 100%; min-height: 270px; object-fit: cover; display: block; transition: transform .35s ease; }
-    .gallery-card:hover img { transform: scale(1.035); }
+    .gallery-viewport:active { cursor: grabbing; }
+    .gallery-track { display: flex; transition: transform .55s cubic-bezier(.22,.61,.36,1); }
+    .gallery-card {
+      position: relative; flex: 0 0 100%; min-width: 0; aspect-ratio: 16 / 9; overflow: hidden;
+      background: #dceaf5;
+    }
+    .gallery-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .gallery-card::after {
-      content: ''; position: absolute; inset: 45% 0 0;
-      background: linear-gradient(to bottom, transparent, rgba(0, 35, 70, .82));
+      content: ''; position: absolute; inset: 38% 0 0;
+      background: linear-gradient(to bottom, transparent, rgba(0, 35, 70, .88));
     }
     .gallery-label {
-      position: absolute; z-index: 1; left: 20px; right: 20px; bottom: 18px;
-      color: #fff; font-family: var(--heading-font); font-size: 18px; font-weight: 700;
+      position: absolute; z-index: 1; left: 28px; right: 28px; bottom: 25px;
+      color: #fff; font-family: var(--heading-font); font-size: clamp(18px, 2.6vw, 25px); font-weight: 700;
     }
+    .gallery-location { display: block; margin-top: 5px; font-family: var(--body-font); font-size: 13px; font-weight: 600; color: rgba(255,255,255,.82); }
+    .gallery-arrow {
+      position: absolute; z-index: 2; top: 50%; width: 44px; height: 44px; display: grid; place-items: center;
+      border: 1px solid rgba(255,255,255,.7); border-radius: 50%; color: var(--primary-dark);
+      background: rgba(255,255,255,.94); box-shadow: 0 5px 18px rgba(0,35,70,.2); cursor: pointer;
+      transform: translateY(-50%); transition: transform .2s ease, background .2s ease;
+    }
+    .gallery-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.05); }
+    .gallery-arrow:focus-visible { outline: 3px solid rgba(255,255,255,.9); outline-offset: 3px; }
+    .gallery-arrow.prev { left: 18px; }
+    .gallery-arrow.next { right: 18px; }
+    .gallery-footer { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 18px; }
+    .gallery-dots { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .gallery-dot { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: #b7c5d3; cursor: pointer; transition: width .2s ease, background .2s ease; }
+    .gallery-dot[aria-current="true"] { width: 26px; border-radius: 999px; background: var(--primary); }
+    .gallery-count { min-width: 42px; color: var(--text-muted); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .google-summary {
       display: flex; align-items: center; justify-content: center; gap: 14px;
       width: fit-content; margin: 0 auto 30px; padding: 14px 18px;
@@ -377,8 +398,11 @@
 
     @media (max-width: 720px) {
       .proof-section { padding: 54px 18px; }
-      .gallery-grid { grid-template-columns: 1fr; }
-      .gallery-card, .gallery-card img { min-height: 230px; }
+      .gallery-card { aspect-ratio: 4 / 3; }
+      .gallery-label { left: 20px; right: 20px; bottom: 18px; }
+      .gallery-arrow { width: 40px; height: 40px; }
+      .gallery-arrow.prev { left: 10px; }
+      .gallery-arrow.next { right: 10px; }
       .review-highlights { grid-template-columns: 1fr; }
       .lander-topbar { padding: 14px 16px; }
       .rating-badge { padding: 8px 9px; gap: 6px; }
@@ -760,7 +784,17 @@
           <h2 class="section-title" id="gallery-title"></h2>
           <p class="section-copy" id="gallery-copy"></p>
         </div>
-        <div class="gallery-grid" id="gallery-grid"></div>
+        <div class="gallery-carousel" id="gallery-carousel" aria-roledescription="carousel" aria-label="Recent Elite Glass & Window projects">
+          <div class="gallery-viewport" id="gallery-viewport">
+            <div class="gallery-track" id="gallery-track"></div>
+          </div>
+          <button class="gallery-arrow prev" id="gallery-prev" type="button" aria-label="Show previous project"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+          <button class="gallery-arrow next" id="gallery-next" type="button" aria-label="Show next project"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+          <div class="gallery-footer">
+            <div class="gallery-dots" id="gallery-dots" aria-label="Choose a project"></div>
+            <span class="gallery-count" id="gallery-count" aria-live="polite"></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -905,11 +939,72 @@
     document.getElementById('gallery-eyebrow').textContent = G.eyebrow;
     document.getElementById('gallery-title').textContent = G.headline;
     document.getElementById('gallery-copy').textContent = G.subheadline;
-    document.getElementById('gallery-grid').innerHTML = G.items.map(item => `
-      <article class="gallery-card">
+    const galleryTrack = document.getElementById('gallery-track');
+    const galleryDots = document.getElementById('gallery-dots');
+    const galleryCount = document.getElementById('gallery-count');
+    const galleryCarousel = document.getElementById('gallery-carousel');
+    const galleryViewport = document.getElementById('gallery-viewport');
+    let galleryIndex = 0;
+    let galleryTimer;
+    let galleryPointerStart = null;
+
+    galleryTrack.innerHTML = G.items.map((item, index) => `
+      <article class="gallery-card" role="group" aria-roledescription="slide" aria-label="${index + 1} of ${G.items.length}">
         <img src="${item.image}" alt="${item.alt}" loading="lazy" />
-        <h3 class="gallery-label">${item.title}</h3>
+        <h3 class="gallery-label">${item.title}<span class="gallery-location">${item.location}</span></h3>
       </article>`).join('');
+    galleryDots.innerHTML = G.items.map((item, index) =>
+      `<button class="gallery-dot" type="button" aria-label="Show ${item.title}" data-gallery-index="${index}"></button>`
+    ).join('');
+
+    function showGalleryItem(nextIndex, userInitiated = false) {
+      galleryIndex = (nextIndex + G.items.length) % G.items.length;
+      galleryTrack.style.transform = `translateX(-${galleryIndex * 100}%)`;
+      galleryCount.textContent = `${galleryIndex + 1} / ${G.items.length}`;
+      galleryDots.querySelectorAll('.gallery-dot').forEach((dot, index) => {
+        dot.setAttribute('aria-current', index === galleryIndex ? 'true' : 'false');
+      });
+      if (userInitiated) restartGalleryTimer();
+    }
+
+    function stopGalleryTimer() {
+      window.clearInterval(galleryTimer);
+    }
+
+    function startGalleryTimer() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || G.items.length < 2) return;
+      stopGalleryTimer();
+      galleryTimer = window.setInterval(() => showGalleryItem(galleryIndex + 1), 5500);
+    }
+
+    function restartGalleryTimer() {
+      stopGalleryTimer();
+      startGalleryTimer();
+    }
+
+    document.getElementById('gallery-prev').addEventListener('click', () => showGalleryItem(galleryIndex - 1, true));
+    document.getElementById('gallery-next').addEventListener('click', () => showGalleryItem(galleryIndex + 1, true));
+    galleryDots.addEventListener('click', event => {
+      const dot = event.target.closest('[data-gallery-index]');
+      if (dot) showGalleryItem(Number(dot.dataset.galleryIndex), true);
+    });
+    galleryCarousel.addEventListener('mouseenter', stopGalleryTimer);
+    galleryCarousel.addEventListener('mouseleave', startGalleryTimer);
+    galleryCarousel.addEventListener('focusin', stopGalleryTimer);
+    galleryCarousel.addEventListener('focusout', event => {
+      if (!galleryCarousel.contains(event.relatedTarget)) startGalleryTimer();
+    });
+    galleryViewport.addEventListener('pointerdown', event => { galleryPointerStart = event.clientX; });
+    galleryViewport.addEventListener('pointerup', event => {
+      if (galleryPointerStart === null) return;
+      const distance = event.clientX - galleryPointerStart;
+      galleryPointerStart = null;
+      if (Math.abs(distance) > 45) showGalleryItem(galleryIndex + (distance < 0 ? 1 : -1), true);
+    });
+    galleryViewport.addEventListener('pointercancel', () => { galleryPointerStart = null; });
+    document.addEventListener('visibilitychange', () => document.hidden ? stopGalleryTimer() : startGalleryTimer());
+    showGalleryItem(0);
+    startGalleryTimer();
 
     const V = C.reviews;
     document.getElementById('reviews-eyebrow').textContent = V.eyebrow;
