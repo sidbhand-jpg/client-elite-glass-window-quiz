@@ -6,6 +6,14 @@ Standalone, config-driven estimate quiz adapted for Elite Glass & Window.
 
 Serve this directory with any static web server, then open `index.html`.
 
+## Funnel variants
+
+- `/a` — Type A short-form landing experience
+- `/b` — Type B landing experience with project gallery and Google review proof
+- `/` — defaults to Type B
+
+The paths share the same quiz, configuration, lead submission, and tracking implementation.
+
 ## Before launch
 
 Set the live values in `config.js` for:

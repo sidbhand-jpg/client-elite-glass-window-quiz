@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Glass & Window Estimate | Elite Glass & Window</title>
   <meta name="description" content="Tell Elite Glass & Window about your glass, window, door, shower enclosure, mirror, railing, or storefront project and request a free estimate." />
-  <link rel="icon" href="./assets/logo.svg" type="image/svg+xml" />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+
+  <script>
+    document.documentElement.dataset.funnelVariant =
+      /^\/a(?:\/|$)/i.test(window.location.pathname) ? 'a' : 'b';
+  </script>
 
   <!-- CONFIG — must load before this file -->
-  <script src="./config.js"></script>
+  <script src="/config.js"></script>
   <script src="https://unpkg.com/lucide@1.37.0/dist/umd/lucide.min.js"></script>
   <script>
     if (!window.CONFIG) {
@@ -50,9 +55,9 @@
         </head>
         <body>
           <div class="config-error">
-            <h1>CONFIG.js did not load</h1>
-            <p>This template requires <code>index.html</code> and <code>CONFIG.js</code> to be deployed together in the same folder.</p>
-            <p>If you are using Cloudflare, make sure the deploy includes both files and that <code>CONFIG.js</code> is publicly served at this same URL level.</p>
+            <h1>config.js did not load</h1>
+            <p>This template requires <code>index.html</code> and lowercase <code>config.js</code> to be deployed together in the same folder.</p>
+            <p>If you are using Cloudflare, make sure the deploy includes both files and that <code>config.js</code> is publicly served at this same URL level.</p>
           </div>
         </body>
       `;
@@ -293,6 +298,77 @@
     .lander-trust {
       font-size: 12px;
       color: var(--text-muted);
+    }
+
+    /* Type B proof sections */
+    .proof-sections { background: var(--bg); }
+    html[data-funnel-variant="a"] .proof-sections { display: none !important; }
+    .proof-section { padding: 72px 24px; }
+    .proof-section.alt { background: var(--surface); }
+    .proof-inner { width: min(1080px, 100%); margin: 0 auto; }
+    .section-heading { max-width: 680px; margin: 0 auto 34px; text-align: center; }
+    .section-eyebrow {
+      color: var(--primary); font-size: 12px; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .section-title {
+      color: var(--text); font-family: var(--heading-font); font-size: clamp(25px, 4vw, 38px);
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .section-copy { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .gallery-card {
+      position: relative; min-height: 270px; border-radius: 18px; overflow: hidden;
+      background: #dceaf5; box-shadow: var(--shadow);
+    }
+    .gallery-card img { width: 100%; height: 100%; min-height: 270px; object-fit: cover; display: block; transition: transform .35s ease; }
+    .gallery-card:hover img { transform: scale(1.035); }
+    .gallery-card::after {
+      content: ''; position: absolute; inset: 45% 0 0;
+      background: linear-gradient(to bottom, transparent, rgba(0, 35, 70, .82));
+    }
+    .gallery-label {
+      position: absolute; z-index: 1; left: 20px; right: 20px; bottom: 18px;
+      color: #fff; font-family: var(--heading-font); font-size: 18px; font-weight: 700;
+    }
+    .google-summary {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      width: fit-content; margin: 0 auto 30px; padding: 14px 18px;
+      border: 1px solid var(--border); border-radius: 14px; background: #fff;
+    }
+    .google-mark { font: 800 28px/1 Arial, sans-serif; color: #4285f4; }
+    .google-stars { color: #fbbc04; letter-spacing: 2px; font-size: 18px; }
+    .google-label { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+    .review-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .review-card {
+      padding: 24px; border: 1px solid var(--border); border-radius: 16px;
+      background: #fff; text-align: left;
+    }
+    .review-icon {
+      width: 42px; height: 42px; display: grid; place-items: center; margin-bottom: 16px;
+      border-radius: 11px; color: var(--primary); background: #eaf3fa;
+    }
+    .review-icon svg { width: 21px; height: 21px; }
+    .review-card h3 { font-family: var(--heading-font); font-size: 17px; margin-bottom: 8px; }
+    .review-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+    .reviews-cta, .bottom-cta {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: fit-content; margin: 28px auto 0; padding: 14px 22px;
+      border-radius: 12px; font-family: var(--heading-font); font-weight: 700;
+      text-decoration: none; cursor: pointer;
+    }
+    .reviews-cta { color: var(--primary); background: #fff; border: 2px solid var(--primary); }
+    .reviews-cta:hover { background: #eaf3fa; }
+    .bottom-proof-cta { text-align: center; padding: 58px 24px; background: var(--primary-dark); color: #fff; }
+    .bottom-proof-cta h2 { font-family: var(--heading-font); font-size: clamp(24px, 4vw, 36px); margin-bottom: 10px; }
+    .bottom-proof-cta p { color: rgba(255,255,255,.8); line-height: 1.6; }
+    .bottom-cta { border: 0; color: var(--primary-dark); background: #fff; font-size: 16px; }
+
+    @media (max-width: 720px) {
+      .proof-section { padding: 54px 18px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-card, .gallery-card img { min-height: 230px; }
+      .review-highlights { grid-template-columns: 1fr; }
     }
 
     /* ══════════════════════════════════════════════════════
@@ -654,6 +730,44 @@
 
   </div>
 
+  <!-- Type B funnel proof: visitors can explore before starting the quiz -->
+  <div class="proof-sections" id="proof-sections">
+    <section class="proof-section" aria-labelledby="gallery-title">
+      <div class="proof-inner">
+        <div class="section-heading">
+          <p class="section-eyebrow" id="gallery-eyebrow"></p>
+          <h2 class="section-title" id="gallery-title"></h2>
+          <p class="section-copy" id="gallery-copy"></p>
+        </div>
+        <div class="gallery-grid" id="gallery-grid"></div>
+      </div>
+    </section>
+
+    <section class="proof-section alt" aria-labelledby="reviews-title">
+      <div class="proof-inner">
+        <div class="section-heading">
+          <p class="section-eyebrow" id="reviews-eyebrow"></p>
+          <h2 class="section-title" id="reviews-title"></h2>
+          <p class="section-copy" id="reviews-copy"></p>
+        </div>
+        <div class="google-summary" aria-label="Customer feedback on Google">
+          <span class="google-mark" aria-hidden="true">G</span>
+          <div><div class="google-stars" aria-hidden="true">★★★★★</div><div class="google-label">Customer feedback on Google</div></div>
+        </div>
+        <div class="review-highlights" id="review-highlights"></div>
+        <a class="reviews-cta" id="reviews-cta" target="_blank" rel="noopener noreferrer"></a>
+      </div>
+    </section>
+
+    <section class="bottom-proof-cta">
+      <div class="proof-inner">
+        <h2>Ready to Plan Your Project?</h2>
+        <p>Answer five quick questions and request a free, no-obligation estimate.</p>
+        <button class="bottom-cta" id="bottom-cta">Get My Free Estimate →</button>
+      </div>
+    </section>
+  </div>
+
   <!-- ============================================================
        QUIZ CHROME — topbar + progress bar, hidden on lander
   ============================================================ -->
@@ -691,6 +805,7 @@
     if (!window.CONFIG) return;
 
     const C = window.CONFIG;
+    const funnelVariant = document.documentElement.dataset.funnelVariant || 'b';
 
     // ── 1. Apply CSS variables ───────────────────────────────
     const R = document.documentElement.style;
@@ -716,6 +831,7 @@
     if (C.clarityId && C.clarityId !== 'YOUR_CLARITY_ID') {
       window._clarityTag.src = `https://www.clarity.ms/tag/${C.clarityId}`;
       if (window.clarity) window.clarity('set', 'funnelName', C.businessName);
+      if (window.clarity) window.clarity('set', 'funnelVariant', funnelVariant.toUpperCase());
     } else {
       console.warn('⚠️ Clarity project ID not set in CONFIG.clarityId');
     }
@@ -760,6 +876,31 @@
     document.getElementById('lander-cta').textContent   = L.ctaLabel;
     document.getElementById('lander-trust').textContent = L.trustNote;
 
+    // Type B gallery and review proof
+    const G = C.gallery;
+    document.getElementById('gallery-eyebrow').textContent = G.eyebrow;
+    document.getElementById('gallery-title').textContent = G.headline;
+    document.getElementById('gallery-copy').textContent = G.subheadline;
+    document.getElementById('gallery-grid').innerHTML = G.items.map(item => `
+      <article class="gallery-card">
+        <img src="${item.image}" alt="${item.alt}" loading="lazy" />
+        <h3 class="gallery-label">${item.title}</h3>
+      </article>`).join('');
+
+    const V = C.reviews;
+    document.getElementById('reviews-eyebrow').textContent = V.eyebrow;
+    document.getElementById('reviews-title').textContent = V.headline;
+    document.getElementById('reviews-copy').textContent = V.subheadline;
+    document.getElementById('review-highlights').innerHTML = V.highlights.map(item => `
+      <article class="review-card">
+        <div class="review-icon"><i data-lucide="${item.icon}"></i></div>
+        <h3>${item.title}</h3><p>${item.text}</p>
+      </article>`).join('');
+    const reviewsCta = document.getElementById('reviews-cta');
+    reviewsCta.href = V.url;
+    reviewsCta.innerHTML = `${V.ctaLabel} <i data-lucide="external-link"></i>`;
+    renderIcons(document.getElementById('proof-sections'));
+
     // Crew photo or placeholder
     const photoWrap = document.getElementById('crew-photo-wrap');
     if (L.crewImageUrl) {
@@ -781,6 +922,7 @@
 
     // CTA → start quiz
     document.getElementById('lander-cta').addEventListener('click', startQuiz);
+    document.getElementById('bottom-cta').addEventListener('click', startQuiz);
 
     // ── 6. Quiz logo ─────────────────────────────────────────
     document.getElementById('quiz-logo').innerHTML = logoHTML(false);
@@ -872,7 +1014,7 @@
       // Note: fbq('track', 'Lead') is fired in handleSubmit with a deduplication
       // eventID so it is intentionally NOT fired here on THANKS_STEP.
       if (window.fbq) {
-        fbq('trackCustom', 'FunnelStep', { step: label });
+        fbq('trackCustom', 'FunnelStep', { step: label, variant: funnelVariant.toUpperCase() });
       }
     }
 
@@ -880,8 +1022,10 @@
     function startQuiz() {
       // Hide lander, show quiz chrome + funnel
       document.getElementById('lander-screen').classList.add('hidden');
+      document.getElementById('proof-sections').classList.add('hidden');
       document.getElementById('quiz-chrome').classList.add('visible');
       document.getElementById('funnel-wrap').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       currentStep = 1;
       renderStep(1);
     }
@@ -904,8 +1048,10 @@
         if (step === 0) {
           // Back to lander
           document.getElementById('lander-screen').classList.remove('hidden');
+          document.getElementById('proof-sections').classList.remove('hidden');
           document.getElementById('quiz-chrome').classList.remove('visible');
           document.getElementById('funnel-wrap').classList.add('hidden');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }
         if (step <= totalQuestions) renderQuestion(step - 1);
@@ -1159,6 +1305,7 @@
       // ── Build enriched webhook payload ─────────────────────
       const payload = {
         business:     C.businessName,
+        funnel_variant: funnelVariant.toUpperCase(),
         submitted_at: new Date().toISOString(),
         contact:      formData,   // includes zip
         quiz_answers: answers,
@@ -1232,7 +1379,7 @@
   ================================================================
   ⚠️  PRE-LAUNCH CHECKLIST — values that MUST be replaced
   ================================================================
-  In CONFIG.js:
+  In config.js:
     metaPixelId     → your 15–16 digit Meta Pixel ID
     clarityId       → your Microsoft Clarity project ID
     webhookUrl      → your real Make / Zapier / GHL webhook URL

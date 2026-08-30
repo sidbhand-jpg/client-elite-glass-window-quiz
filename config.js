@@ -4,7 +4,7 @@ window.CONFIG = {
   tagline: "Custom Glass, Windows & Doors for Greater Seattle",
   phone: "+1 (425) 890-8233",
   businessHours: "Call for current showroom hours",
-  logoUrl: "./assets/logo.svg",
+  logoUrl: "/assets/logo.svg",
   logoAlt: "Elite Glass & Window logo",
 
   colors: {
@@ -33,9 +33,34 @@ window.CONFIG = {
       "✓ Serving Greater Seattle from Redmond"
     ],
     ctaLabel: "Get My Free Estimate →",
-    crewImageUrl: "./assets/elite-glass-hero.png",
+    crewImageUrl: "/assets/elite-glass-hero.png",
     crewImageAlt: "Contemporary Greater Seattle home with custom windows and glass",
     trustNote: "Local glass, window, and door specialists"
+  },
+
+  gallery: {
+    eyebrow: "Recent project inspiration",
+    headline: "See What Is Possible for Your Space",
+    subheadline: "Explore the types of custom glass and window projects our team can help you plan.",
+    items: [
+      { title: "Window Replacement", image: "/assets/window-replacement.png", alt: "Bright home interior with replacement windows" },
+      { title: "Shower Enclosures", image: "/assets/shower-enclosure.png", alt: "Modern custom glass shower enclosure" },
+      { title: "Custom Glass & Mirrors", image: "/assets/custom-glass-mirror.png", alt: "Custom glass and mirror installation" },
+      { title: "Railings & Storefronts", image: "/assets/glass-railing-storefront.png", alt: "Architectural glass railing and storefront work" }
+    ]
+  },
+
+  reviews: {
+    eyebrow: "Google reviews",
+    headline: "Choose a Local Team with Confidence",
+    subheadline: "See feedback from customers, explore recent experiences, or share your own on Google.",
+    url: "https://www.google.com/maps/search/?api=1&query=Elite+Glass+%26+Window+4028+148th+Ave+NE+Redmond+WA+98052",
+    ctaLabel: "View Reviews on Google",
+    highlights: [
+      { icon: "message-circle", title: "Clear Communication", text: "Straightforward guidance from your first questions through project planning." },
+      { icon: "ruler", title: "Custom-Measured", text: "Solutions planned around your space, priorities, and project requirements." },
+      { icon: "map-pin", title: "Local Expertise", text: "Residential and commercial service across Redmond and Greater Seattle." }
+    ]
   },
 
   questions: [
@@ -45,10 +70,10 @@ window.CONFIG = {
       question: "What glass or window project do you need?",
       type: "image-grid",
       options: [
-        { label: "Window replacement", icon: "panels-top-left", image: "./assets/window-replacement.png" },
-        { label: "Shower enclosure", icon: "bath", image: "./assets/shower-enclosure.png" },
-        { label: "Custom glass or mirror", icon: "scan-line", image: "./assets/custom-glass-mirror.png" },
-        { label: "Glass railing or storefront", icon: "store", image: "./assets/glass-railing-storefront.png" }
+        { label: "Window replacement", icon: "panels-top-left", image: "/assets/window-replacement.png" },
+        { label: "Shower enclosure", icon: "bath", image: "/assets/shower-enclosure.png" },
+        { label: "Custom glass or mirror", icon: "scan-line", image: "/assets/custom-glass-mirror.png" },
+        { label: "Glass railing or storefront", icon: "store", image: "/assets/glass-railing-storefront.png" }
       ]
     },
     {
