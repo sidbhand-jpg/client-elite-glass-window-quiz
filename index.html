@@ -610,6 +610,16 @@
       justify-content: center; gap: 5px;
     }
 
+    .submission-error {
+      min-height: 20px;
+      margin: 10px 0 0;
+      color: #b42318;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.45;
+      text-align: center;
+    }
+
     /* ── Primary button ── */
     .btn-primary {
       display: flex; align-items: center;
@@ -1346,6 +1356,8 @@
           </label>
         </div>
 
+        <p class="submission-error" id="submission-error" role="alert" aria-live="polite"></p>
+
         <button class="btn-primary" id="submit-btn">
           <span id="btn-label">${f.ctaLabel}</span>
           <div class="spinner" id="spinner"></div>
@@ -1385,6 +1397,8 @@
       const btn   = formDiv.querySelector('#submit-btn');
       const label = formDiv.querySelector('#btn-label');
       const spin  = formDiv.querySelector('#spinner');
+      const errorMessage = formDiv.querySelector('#submission-error');
+      errorMessage.textContent = '';
       btn.disabled = true;
       label.textContent = 'Sending…';
       spin.style.display = 'block';
@@ -1416,13 +1430,6 @@
         if (el) el.value = val;
       });
 
-      // ── Fire Meta Pixel Lead event with eventID ────────────
-      // The eventID matches what GHL sends via CAPI so Meta can deduplicate
-      // browser-side and server-side events and avoid double-counting.
-      if (typeof fbq !== 'undefined' && attribution.lead_event_id) {
-        fbq('track', 'Lead', {}, { eventID: attribution.lead_event_id });
-      }
-
       // ── Build enriched webhook payload ─────────────────────
       const payload = {
         business:     C.businessName,
@@ -1448,6 +1455,35 @@
         },
         sms_consent: smsCheck ? smsCheck.checked : false,
       };
+
+      if (!C.leadRouterUrl) {
+        errorMessage.textContent = 'Online calling is being configured. Please call Elite Glass & Window directly for now.';
+        btn.disabled = false;
+        label.textContent = f.ctaLabel;
+        spin.style.display = 'none';
+        return;
+      }
+
+      try {
+        const routerResponse = await fetch(C.leadRouterUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const routerResult = await routerResponse.json().catch(() => ({}));
+        if (!routerResponse.ok) throw new Error(routerResult.error || 'The call could not be started.');
+      } catch (error) {
+        errorMessage.textContent = error.message || 'The call could not be started. Please call Elite Glass & Window directly.';
+        btn.disabled = false;
+        label.textContent = f.ctaLabel;
+        spin.style.display = 'none';
+        return;
+      }
+
+      // Fire the conversion only after the lead router accepts the request.
+      if (typeof fbq !== 'undefined' && attribution.lead_event_id) {
+        fbq('track', 'Lead', {}, { eventID: attribution.lead_event_id });
+      }
 
       if (C.webhookUrl) {
         try {

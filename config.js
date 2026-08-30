@@ -171,7 +171,8 @@ window.CONFIG = {
   clarityId: "yadrhyi60g",
   metaPixelId: "",
   webhookUrl: "",
-  smsConsentText: "I agree to receive SMS messages from {businessName} about my estimate request. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
+  leadRouterUrl: "https://houzflow-lead-router.houzflow.workers.dev/api/quiz-lead",
+  smsConsentText: "I agree to receive calls and SMS messages from {businessName} about my estimate request, including an immediate call from its automated AI assistant. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
   footerLinks: [
     { label: "Privacy Policy", href: "https://eliteglassandwindow.com/privacy-policy.html" },
     { label: "Terms of Use", href: "https://eliteglassandwindow.com/terms.html" }

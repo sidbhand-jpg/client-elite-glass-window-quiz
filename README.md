@@ -19,6 +19,7 @@ Pushing to `main` automatically creates a new Cloudflare Pages deployment.
 | Microsoft Clarity | Active | Project ID `yadrhyi60g` |
 | Meta Pixel | Not configured | `metaPixelId` is empty |
 | Lead webhook | Not configured | `webhookUrl` is empty |
+| Immediate AI call | Active demo integration | Form submission starts the Retell call through the imported Telnyx SIP trunk |
 
 The funnel can be completed while the Meta Pixel or webhook is empty. However, an empty webhook means the submitted lead is not sent to an external CRM or automation platform.
 
@@ -51,7 +52,9 @@ The landing page introduces Elite Glass & Window, displays project imagery, Goog
 4. Desired timeline
 5. Investment range
 
-The final form collects name, email, phone number, ZIP code, and required SMS consent. A successful submission displays the thank-you screen and click-to-call option.
+The final form collects name, email, phone number, ZIP code, and required call/SMS consent. A successful submission displays the thank-you screen and click-to-call option.
+
+When `leadRouterUrl` is configured, submission is accepted only after the lead-router endpoint starts an immediate outbound AI call. The quiz stays on the form and shows an error if the router rejects the request; it does not display a false success screen.
 
 ### Funnel Variants
 
@@ -102,6 +105,7 @@ Edit `config.js` to change project content. The main sections are:
 | `form` | Contact-form copy and fields |
 | `thankYou` | Submission confirmation and call CTA |
 | Tracking fields | Clarity, Meta Pixel, and webhook configuration |
+| `leadRouterUrl` | Immediate-call demo integration |
 | `footerLinks` | Privacy Policy and Terms of Use destinations |
 
 ### Business and Brand Settings
@@ -249,9 +253,15 @@ The browser sends a JSON `POST` request using `no-cors` mode. A representative p
 
 The frontend cannot read a response body in `no-cors` mode. Confirm delivery using the receiving platform’s execution log and a real test submission.
 
-## SMS Compliance
+## Immediate Lead Call
 
-The contact form requires an SMS consent checkbox. Its copy is controlled by `smsConsentText`, where `{businessName}` is replaced at runtime.
+The lead router is separate from the optional webhook. It receives the complete quiz payload at `POST /api/quiz-lead`, verifies the exact allowed origin and required call consent, and asks Retell to call the submitted lead through the imported Telnyx credential SIP trunk. The Retell agent receives the quiz answers as dynamic variables so it can discuss the specific glass or window project without asking the prospect to repeat everything.
+
+This endpoint intentionally omits Turnstile for the controlled demo. Keep the allowed origin narrow and add rate limiting or equivalent abuse protection before running paid traffic.
+
+## Contact Consent
+
+The contact form requires consent for the immediate automated AI call and follow-up SMS messages. Its copy is controlled by `smsConsentText`, where `{businessName}` is replaced at runtime.
 
 Keep the `STOP` and `HELP` language intact when editing the disclosure. The configured Privacy Policy and Terms of Use links are displayed with the consent copy and in the footer.
 
@@ -276,6 +286,9 @@ Only stage files that are intentionally part of the release. After pushing, veri
 - [x] Privacy Policy and Terms of Use links
 - [x] Microsoft Clarity project ID
 - [ ] Lead webhook URL
+- [x] Worker provider secrets
+- [ ] Publish the Retell prompt from `lead-router/AGENT_PROMPT.md`
+- [ ] Controlled immediate-call smoke test using an authorized phone
 - [ ] Meta Pixel ID
 - [ ] Real end-to-end lead delivery test
 - [ ] Meta browser and server event deduplication test, if CAPI is enabled
