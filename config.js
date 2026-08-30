@@ -53,13 +53,31 @@ window.CONFIG = {
   reviews: {
     eyebrow: "Google reviews",
     headline: "Choose a Local Team with Confidence",
-    subheadline: "See feedback from customers, explore recent experiences, or share your own on Google.",
-    url: "https://www.google.com/maps/search/?api=1&query=Elite+Glass+%26+Window+4028+148th+Ave+NE+Redmond+WA+98052",
-    ctaLabel: "View Reviews on Google",
-    highlights: [
-      { icon: "message-circle", title: "Clear Communication", text: "Straightforward guidance from your first questions through project planning." },
-      { icon: "ruler", title: "Custom-Measured", text: "Solutions planned around your space, priorities, and project requirements." },
-      { icon: "map-pin", title: "Local Expertise", text: "Residential and commercial service across Redmond and Greater Seattle." }
+    subheadline: "Here are a few recent experiences shared by Elite Glass & Window customers.",
+    rating: "4.8",
+    reviewCount: 42,
+    items: [
+      {
+        name: "Ting Cui",
+        initials: "TC",
+        contributor: "2 reviews · 1 photo",
+        date: "a month ago",
+        text: "Had a great experience working with Elite Glass! They did a fantastic job with our custom window order and installation. The team was professional, punctual, and left everything super clean. Highly recommend!"
+      },
+      {
+        name: "Pepper Jia Chen",
+        initials: "PC",
+        contributor: "5 reviews · 12 photos",
+        date: "a month ago",
+        text: "Very professional and knowledgeable team. The owner provided an accurate quote and a well-planned solution. The installation quality was excellent, with great attention to detail, and the project was completed on schedule. Highly recommend!"
+      },
+      {
+        name: "an weimeng",
+        initials: "AW",
+        contributor: "2 reviews · 2 photos",
+        date: "2 years ago",
+        text: "Through a friend's recommendation, I chose this company. The sliding glass door in my backyard was broken, and they promptly came to measure, provided a clear and reasonable quote, without any additional hidden fees. I'm very satisfied. The installation workers were very diligent and responsible."
+      }
     ]
   },
 
