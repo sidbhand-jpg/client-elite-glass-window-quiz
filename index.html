@@ -1473,10 +1473,19 @@
 
       if (C.webhookUrl) {
         try {
+          // Make's copied lead workflow expects the quiz and attribution fields
+          // at the top level. Keep the nested payload too for compatible tools.
+          const webhookPayload = {
+            ...payload,
+            ...formData,
+            ...answers,
+            ...payload.attribution,
+            lead_source: `${C.businessName} Quiz`,
+          };
           await fetch(C.webhookUrl, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify(payload),
+            body:    JSON.stringify(webhookPayload),
             mode:    'no-cors',
           });
         } catch (e) {
