@@ -162,7 +162,7 @@ window.CONFIG = {
 
   thankYou: {
     headline: "Your request is in!",
-    body: "Be on the lookout for a call from our team in the next few minutes.",
+    body: "Our team will review your project and follow up within 1 business day.",
     callPrompt: "Prefer to talk now? Call us:",
     callLabel: "Call (425) 890-8233"
   },
@@ -170,9 +170,9 @@ window.CONFIG = {
   // Add live values before launch. Empty values safely disable these integrations.
   clarityId: "yadrhyi60g",
   metaPixelId: "",
-  webhookUrl: "",
-  leadRouterUrl: "https://houzflow-lead-router-demo.houzflow.workers.dev/api/quiz-lead",
-  smsConsentText: "I agree to receive calls and SMS messages from {businessName} about my estimate request, including an immediate call from its automated AI assistant. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
+  webhookUrl: "https://hook.us2.make.com/qxerkrrp1yt9b7jl76z82mlfzi3uop3m",
+  leadRouterUrl: "",
+  smsConsentText: "I agree to receive calls and SMS messages from {businessName} about my estimate request. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
   footerLinks: [
     { label: "Privacy Policy", href: "https://eliteglassandwindow.com/privacy-policy.html" },
     { label: "Terms of Use", href: "https://eliteglassandwindow.com/terms.html" }

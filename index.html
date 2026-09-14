@@ -1466,31 +1466,7 @@
         sms_consent: smsCheck ? smsCheck.checked : false,
       };
 
-      if (!C.leadRouterUrl) {
-        errorMessage.textContent = 'Online calling is being configured. Please call Elite Glass & Window directly for now.';
-        btn.disabled = false;
-        label.textContent = f.ctaLabel;
-        spin.style.display = 'none';
-        return;
-      }
-
-      try {
-        const routerResponse = await fetch(C.leadRouterUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const routerResult = await routerResponse.json().catch(() => ({}));
-        if (!routerResponse.ok) throw new Error(routerResult.error || 'The call could not be started.');
-      } catch (error) {
-        errorMessage.textContent = error.message || 'The call could not be started. Please call Elite Glass & Window directly.';
-        btn.disabled = false;
-        label.textContent = f.ctaLabel;
-        spin.style.display = 'none';
-        return;
-      }
-
-      // Fire the conversion only after the lead router accepts the request.
+      // The quiz is Make-webhook-only. It never starts an automated phone call.
       if (typeof fbq !== 'undefined' && attribution.lead_event_id) {
         fbq('track', 'Lead', {}, { eventID: attribution.lead_event_id });
       }
