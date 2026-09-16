@@ -875,6 +875,22 @@
     const C = window.CONFIG;
     const funnelVariant = document.documentElement.dataset.funnelVariant || 'b';
 
+    function metaEventId(kind) {
+      return `evt_${kind}_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    }
+
+    function sendCapi(input) {
+      return fetch('/api/capi', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(input),
+        keepalive: true,
+      }).then((response) => {
+        if (!response.ok) throw new Error(`CAPI ${response.status}`);
+        return response.json();
+      });
+    }
+
     // ── 1. Apply CSS variables ───────────────────────────────
     const R = document.documentElement.style;
     R.setProperty('--primary',       C.colors.primary);
@@ -906,9 +922,16 @@
 
     // ── 2b. Meta Pixel ───────────────────────────────────────
     if (C.metaPixelId && C.metaPixelId !== 'YOUR_META_PIXEL_ID') {
+      const pageEventId = metaEventId('page');
       window._metaTag.src = 'https://connect.facebook.net/en_US/fbevents.js';
       fbq('init', C.metaPixelId);
-      fbq('track', 'PageView');
+      fbq('track', 'PageView', {}, { eventID: pageEventId });
+      sendCapi({
+        event_name: 'PageView',
+        event_id: pageEventId,
+        source_url: window.location.href,
+        user_agent: navigator.userAgent,
+      }).catch((error) => console.warn('PageView CAPI failed', error.message));
       const ns = document.createElement('noscript');
       ns.innerHTML = `<img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=${C.metaPixelId}&ev=PageView&noscript=1"/>`;
@@ -1464,12 +1487,24 @@
           lead_event_id: attribution.lead_event_id || '',
         },
         sms_consent: smsCheck ? smsCheck.checked : false,
+        sample_record: new URLSearchParams(window.location.search).get('sample_record') === '1'
+          || new URLSearchParams(window.location.search).get('make_test') === '1',
       };
 
       // The quiz is Make-webhook-only. It never starts an automated phone call.
       if (typeof fbq !== 'undefined' && attribution.lead_event_id) {
         fbq('track', 'Lead', {}, { eventID: attribution.lead_event_id });
       }
+
+      const capiDelivery = attribution.lead_event_id
+        ? sendCapi({
+            event_name: 'Lead',
+            event_id: attribution.lead_event_id,
+            ...formData,
+            ...answers,
+            ...payload.attribution,
+          })
+        : Promise.resolve();
 
       if (C.webhookUrl) {
         try {
@@ -1480,18 +1515,21 @@
             ...formData,
             ...answers,
             ...payload.attribution,
-            lead_source: `${C.businessName} Quiz`,
+            lead_source: payload.sample_record ? `TEST ONLY - ${C.businessName} Quiz` : `${C.businessName} Quiz`,
           };
-          await fetch(C.webhookUrl, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify(webhookPayload),
-            mode:    'no-cors',
-          });
+          await Promise.allSettled([
+            capiDelivery,
+            fetch(C.webhookUrl, {
+              method:  'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body:    JSON.stringify(webhookPayload),
+            }),
+          ]);
         } catch (e) {
           console.warn('Webhook error:', e);
         }
       } else {
+        capiDelivery.catch((error) => console.warn('Lead CAPI failed', error.message));
         console.warn('Webhook URL is not configured; submission was not sent.');
       }
 

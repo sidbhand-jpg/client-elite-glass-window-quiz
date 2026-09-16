@@ -234,7 +234,7 @@ Set `webhookUrl` to a Make, GoHighLevel, Zapier, or compatible HTTPS endpoint:
 webhookUrl: "https://your-webhook-endpoint.example"
 ```
 
-The browser sends a JSON `POST` request using `no-cors` mode. A representative payload is:
+The browser sends a JSON `POST` request with `Content-Type: application/json`. A representative payload is:
 
 ```json
 {
@@ -274,7 +274,7 @@ The browser sends a JSON `POST` request using `no-cors` mode. A representative p
 }
 ```
 
-The frontend cannot read a response body in `no-cors` mode. Confirm delivery using the receiving platform’s execution log and a real test submission.
+Confirm delivery using the receiving platform's execution log and a real test submission.
 
 ## Contact Consent
 

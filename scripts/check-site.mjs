@@ -7,6 +7,7 @@ const routeC = await readFile(new URL("c/index.html", root), "utf8");
 const config = await readFile(new URL("config.js", root), "utf8");
 const capi = await readFile(new URL("functions/api/capi.js", root), "utf8");
 const redirects = await readFile(new URL("_redirects", root), "utf8");
+const rootRoute = await readFile(new URL("index.html", root), "utf8");
 
 for (const [index, match] of [...routeB.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].entries()) {
   if (match[1].trim()) new Script(match[1], { filename: `route-b-inline-${index + 1}.js` });
@@ -81,6 +82,23 @@ for (const needle of [
 }
 
 if (!redirects.includes("/c  /c/  301") || redirects.includes("/c/ /index.html")) throw new Error("Route /c redirect is not isolated.");
+
+for (const needle of [
+  "fbq('track', 'PageView', {}, { eventID: pageEventId })",
+  "event_name: 'PageView'",
+  "event_name: 'Lead'",
+  "fetch('/api/capi'",
+  "sample_record",
+  "TEST ONLY - ${C.businessName} Quiz",
+]) {
+  if (!rootRoute.includes(needle)) throw new Error(`Missing root /a tracking behavior: ${needle}`);
+}
+
+for (const [label, route] of [["/b", routeB], ["/c", routeC]]) {
+  for (const needle of ["sample_record", "TEST ONLY - ${C.businessName} Quiz"]) {
+    if (!route.includes(needle)) throw new Error(`Missing ${label} test labeling behavior: ${needle}`);
+  }
+}
 
 for (const needle of [
   'new Set(["PageView", "Lead"])',

@@ -425,7 +425,6 @@
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(payload),
-        mode: 'no-cors',
       });
     }
 
@@ -449,9 +448,11 @@
       const tracking = attribution();
       const leadEventId = eventId('lead');
       const submittedAt = new Date().toISOString();
+      const isTest = new URLSearchParams(location.search).get('sample_record') === '1'
+        || new URLSearchParams(location.search).get('make_test') === '1';
       const payload = {
         business: C.businessName,
-        lead_source: `${C.businessName} Quiz /c`,
+        lead_source: isTest ? `TEST ONLY - ${C.businessName} Quiz /c` : `${C.businessName} Quiz /c`,
         funnel_variant: 'C',
         route: '/c',
         submitted_at: submittedAt,
@@ -465,6 +466,8 @@
         marketing_consent: true,
         consent_method: 'submit_implied',
         consent_copy: String(V.form.consentText || '').replace('{businessName}', C.businessName || ''),
+        sample_record: isTest,
+        lead_event_id: leadEventId,
         capi_event_id: leadEventId,
         ...tracking,
         contact: fields,
