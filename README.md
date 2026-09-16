@@ -292,8 +292,8 @@ Only stage files that are intentionally part of the release. After pushing, veri
 - [ ] Controlled immediate-call smoke test using an authorized phone
 - [x] Meta Pixel ID
 - [ ] Real end-to-end lead delivery test
-- [ ] Meta browser and server event deduplication test, if CAPI is enabled
-- [ ] Desktop and mobile visual acceptance after the final deployment
+- [x] Meta server PageView and Lead Test Events received; browser PageView and shared event IDs verified
+- [x] Desktop and mobile visual acceptance after the final deployment
 
 ## Important Operational Notes
 
