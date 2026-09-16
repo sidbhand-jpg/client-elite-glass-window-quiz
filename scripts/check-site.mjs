@@ -40,6 +40,8 @@ for (const needle of [
   "#step-3-contact",
   "#thank-you",
   "background: var(--secondary-dark); color: var(--white)",
+  'class="rating-badge" aria-label="Five-star rated on Google"',
+  'class="rating-badge-label">Rated on Google',
 ]) {
   if (!routeB.includes(needle) && !config.includes(needle)) throw new Error(`Missing route /b behavior: ${needle}`);
 }
@@ -72,6 +74,8 @@ for (const needle of [
   "#step-2-business-project",
   "#step-3-contact",
   "#thank-you",
+  'class="rating-badge" aria-label="Five-star rated on Google"',
+  'class="rating-badge-label">Rated on Google',
 ]) {
   if (!routeC.includes(needle) && !config.includes(needle)) throw new Error(`Missing route /c behavior: ${needle}`);
 }
