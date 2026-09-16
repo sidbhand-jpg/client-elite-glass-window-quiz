@@ -26,6 +26,15 @@ for (const needle of [
   "fbq('track', 'PageView'",
   "fbq('track', 'Lead'",
   "fbq('set', 'autoConfig', false, C.metaPixelId)",
+  "loadClarity();",
+  "clarity('set', 'funnelStep', label)",
+  "clarity('event', eventName)",
+  "#step-1-property-type",
+  "#step-2-homeowner-project",
+  "#step-2-business-project",
+  "#step-3-contact",
+  "#thank-you",
+  "background: var(--secondary-dark); color: var(--white)",
 ]) {
   if (!routeB.includes(needle) && !config.includes(needle)) throw new Error(`Missing route /b behavior: ${needle}`);
 }
@@ -46,4 +55,4 @@ for (const needle of [
   if (!capi.includes(needle)) throw new Error(`Missing CAPI behavior: ${needle}`);
 }
 
-console.log("Validated isolated /b routing, conditional questions, implicit consent, Pixel, and CAPI wiring.");
+console.log("Validated isolated /b routing, hash-based Clarity steps, brand styling, implicit consent, Pixel, and CAPI wiring.");

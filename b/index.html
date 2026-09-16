@@ -17,7 +17,7 @@
       --navy-dark: #081a35;
       --blue: #45b9ed;
       --blue-light: #75d4f4;
-      --cream: #f5f0e5;
+      --secondary-dark: #002f5f;
       --ink: #17213a;
       --muted: #687084;
       --line: #e2e6ec;
@@ -80,7 +80,7 @@
       background: rgba(255,255,255,.985);
       box-shadow: var(--shadow);
     }
-    .progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: #e9e3d6; }
+    .progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: #dceaf5; }
     .progress-fill { width: 33.333%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--blue-light)); transition: width .25s ease; }
     .step-label { margin: 13px 0 15px; color: #8a92a4; text-align: center; font: 700 12px/1 Barlow Condensed, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
     .question-title { margin: 0 0 19px; color: var(--navy); font: 700 clamp(28px, 5vw, 38px)/1 Barlow Condensed, sans-serif; }
@@ -129,19 +129,19 @@
     .thanks-icon { width: 64px; height: 64px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 50%; color: #0f7750; background: #dff6ea; }
     .thanks h2 { margin: 0 0 9px; color: var(--navy); font: 800 38px/1 Barlow Condensed, sans-serif; text-transform: uppercase; }
     .thanks p { margin: 0 auto; max-width: 460px; color: var(--muted); line-height: 1.6; }
-    .trust-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 24px max(18px, calc((100vw - 1120px)/2)); background: var(--cream); color: var(--navy); }
+    .trust-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 24px max(18px, calc((100vw - 1120px)/2)); background: var(--secondary-dark); color: var(--white); }
     .trust-item { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-align: center; }
-    .trust-item svg { width: 19px; height: 19px; }
+    .trust-item svg { width: 19px; height: 19px; color: var(--blue-light); }
     .estimate-section { padding: 70px 20px 76px; text-align: center; }
     .section-kicker { color: var(--navy); }
     .estimate-section h2 { margin: 10px auto 14px; max-width: 560px; color: var(--navy); font: 800 clamp(38px, 7vw, 58px)/.94 Barlow Condensed, sans-serif; text-transform: uppercase; }
     .estimate-section p { margin: 0 auto 25px; max-width: 560px; color: var(--muted); line-height: 1.7; }
     .cta-button { display: inline-grid; place-items: center; min-width: 240px; padding: 0 24px; text-decoration: none; }
-    .site-footer { padding: 36px 20px 30px; border-top: 1px solid #e7dece; color: #6c7382; background: var(--cream); text-align: center; font-size: 12px; line-height: 1.55; }
-    .footer-logo { width: 220px; max-width: 70vw; height: 42px; object-fit: contain; margin-bottom: 12px; }
-    .site-footer strong { display: block; color: var(--navy); font-family: Barlow Condensed, sans-serif; font-size: 16px; letter-spacing: .08em; text-transform: uppercase; }
+    .site-footer { padding: 36px 20px 30px; border-top: 1px solid rgba(255,255,255,.18); color: var(--white); background: var(--secondary-dark); text-align: center; font-size: 12px; line-height: 1.55; }
+    .footer-logo { width: 220px; max-width: 70vw; height: 42px; object-fit: contain; margin-bottom: 12px; filter: brightness(0) invert(1); }
+    .site-footer strong { display: block; color: var(--white); font-family: Barlow Condensed, sans-serif; font-size: 16px; letter-spacing: .08em; text-transform: uppercase; }
     .footer-links { margin-top: 8px; }
-    .footer-links a { margin: 0 5px; }
+    .footer-links a { margin: 0 5px; color: var(--white); }
     @media (min-width: 860px) {
       .hero { padding-top: 60px; }
       .hero-inner { display: grid; grid-template-columns: minmax(0, .92fr) minmax(480px, 1.08fr); gap: 48px; align-items: center; }
@@ -207,7 +207,7 @@
       <p class="section-kicker">Free project estimate</p>
       <h2>Ready for your new shower glass?</h2>
       <p>Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
-      <a class="cta-button" href="#quiz-card">Start my estimate</a>
+      <a class="cta-button" id="estimate-cta" href="#step-1-property-type">Start my estimate</a>
     </section>
   </main>
 
@@ -225,6 +225,7 @@
     const C = window.CONFIG || {};
     const B = C.routeB || {};
     const answers = {};
+    const trackedClaritySteps = new Set();
     let currentStep = 1;
     let submitting = false;
 
@@ -234,6 +235,8 @@
     const footerLinks = Array.isArray(C.footerLinks) ? C.footerLinks : [];
     const privacyLink = footerLinks.find((link) => link.label === 'Privacy Policy')?.href || '#';
     const termsLink = footerLinks.find((link) => /Terms/.test(link.label))?.href || '#';
+
+    document.documentElement.style.setProperty('--secondary-dark', C.colors?.primaryDark || '#002f5f');
 
     document.getElementById('hero-eyebrow').textContent = B.eyebrow || 'Greater Seattle';
     document.getElementById('hero-headline').textContent = B.headline || 'Custom Shower Glass';
@@ -285,6 +288,30 @@
       fbq('init', C.metaPixelId);
     }
 
+    function loadClarity() {
+      if (!C.clarityId || C.clarityId === 'YOUR_CLARITY_ID' || document.querySelector('script[data-clarity-id]')) return;
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;t.dataset.clarityId=i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window,document,'clarity','script',C.clarityId);
+      clarity('set', 'funnelName', C.businessName || 'Elite Glass & Window');
+      clarity('set', 'funnelVariant', 'B');
+      clarity('event', 'quiz_path_b');
+    }
+
+    function trackQuizStep(hash) {
+      const label = hash.replace(/^#/, '');
+      const eventName = `quiz_b_${label.replace(/-/g, '_')}`;
+      if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+      if (!window.clarity) return;
+      clarity('set', 'funnelStep', label);
+      if (!trackedClaritySteps.has(eventName)) {
+        clarity('event', eventName);
+        trackedClaritySteps.add(eventName);
+      }
+    }
+
     async function sendCapi(input) {
       const response = await fetch('/api/capi', {
         method: 'POST',
@@ -309,8 +336,9 @@
       stepLabel.textContent = step < 3 ? `Step ${step} of 3` : 'Final step';
     }
 
-    function renderQuestion(question, step, canGoBack) {
+    function renderQuestion(question, step, canGoBack, hash) {
       setStep(step);
+      trackQuizStep(hash);
       content.innerHTML = `
         <h2 class="question-title">${escapeHtml(question.label)}</h2>
         <div class="options-grid">
@@ -335,16 +363,19 @@
     function renderAudienceQuestion() {
       delete answers.property_type;
       delete answers.project_need;
-      renderQuestion(B.questions.audience, 1, false);
+      renderQuestion(B.questions.audience, 1, false, '#step-1-property-type');
     }
 
     function renderProjectQuestion() {
-      const question = answers.property_type === 'Homeowner' ? B.questions.homeowner : B.questions.business;
-      renderQuestion(question, 2, true);
+      const isHomeowner = answers.property_type === 'Homeowner';
+      const question = isHomeowner ? B.questions.homeowner : B.questions.business;
+      const hash = isHomeowner ? '#step-2-homeowner-project' : '#step-2-business-project';
+      renderQuestion(question, 2, true, hash);
     }
 
     function renderForm() {
       setStep(3);
+      trackQuizStep('#step-3-contact');
       const form = B.form || {};
       const consent = String(form.consentText || '').replace('{businessName}', C.businessName || 'Elite Glass & Window');
       content.innerHTML = `
@@ -449,6 +480,7 @@
     function renderThanks() {
       progress.style.width = '100%';
       stepLabel.textContent = 'Request received';
+      trackQuizStep('#thank-you');
       content.innerHTML = `
         <div class="thanks">
           <div class="thanks-icon"><i data-lucide="check" aria-hidden="true"></i></div>
@@ -460,8 +492,14 @@
 
     window.addEventListener('load', () => {
       if (window.lucide) lucide.createIcons();
+      loadClarity();
       renderAudienceQuestion();
       trackPageView();
+      document.getElementById('estimate-cta').addEventListener('click', (event) => {
+        event.preventDefault();
+        renderAudienceQuestion();
+        document.getElementById('quiz-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
     }, { once: true });
   })();
   </script>

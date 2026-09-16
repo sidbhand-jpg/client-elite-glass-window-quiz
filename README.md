@@ -172,6 +172,18 @@ The page uses the following funnel hashes:
 
 These labels can be used in Clarity to analyze step-level funnel activity and drop-off.
 
+Route `/b` uses its own three-step conditional hash sequence:
+
+| Route `/b` screen | Hash | Clarity event |
+|---|---|---|
+| Property type | `#step-1-property-type` | `quiz_b_step_1_property_type` |
+| Homeowner project | `#step-2-homeowner-project` | `quiz_b_step_2_homeowner_project` |
+| Property manager/commercial project | `#step-2-business-project` | `quiz_b_step_2_business_project` |
+| Contact form | `#step-3-contact` | `quiz_b_step_3_contact` |
+| Thank-you screen | `#thank-you` | `quiz_b_thank_you` |
+
+Each `/b` render updates `funnelStep`; its one-time custom event records that the visitor reached the screen. Route assignment is recorded as `quiz_path_b`.
+
 ### Meta Pixel
 
 Meta Pixel dataset `1072168465554731` is configured. Route `/b` fires:
@@ -179,7 +191,6 @@ Meta Pixel dataset `1072168465554731` is configured. Route `/b` fires:
 | Event | When | Details |
 |---|---|---|
 | `PageView` | Initial page load | Browser Pixel plus server CAPI using the same `event_id` |
-| `FunnelStep` | Each funnel step | Custom event with step label and variant |
 | `Lead` | Valid form submission | Browser Pixel plus server CAPI using the same `event_id` |
 
 The public dataset identifier lives in `config.js`:
