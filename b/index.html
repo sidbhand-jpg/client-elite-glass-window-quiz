@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Shower Glass Estimate | Elite Glass & Window</title>
+  <meta name="description" content="Request a free custom shower glass estimate from Elite Glass & Window in Greater Seattle.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="/config.js"></script>
+  <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --navy: #102b52;
+      --navy-dark: #081a35;
+      --blue: #45b9ed;
+      --blue-light: #75d4f4;
+      --cream: #f5f0e5;
+      --ink: #17213a;
+      --muted: #687084;
+      --line: #e2e6ec;
+      --white: #fff;
+      --danger: #b42318;
+      --shadow: 0 22px 55px rgba(4, 18, 39, .24);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); font-family: Inter, system-ui, sans-serif; background: #fff; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .site-header {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 clamp(18px, 5vw, 64px);
+      background: #fff;
+      position: relative;
+      z-index: 10;
+    }
+    .brand-logo { display: block; width: min(230px, 55vw); height: 38px; object-fit: contain; object-position: left center; }
+    .rating { display: inline-flex; align-items: center; gap: 7px; color: var(--navy); font-size: 14px; font-weight: 700; white-space: nowrap; }
+    .stars { color: #f5b400; letter-spacing: -2px; font-size: 18px; }
+    .hero {
+      position: relative;
+      min-height: 665px;
+      padding: 38px 18px 70px;
+      background: linear-gradient(180deg, rgba(8, 18, 39, .82) 0%, rgba(8, 18, 39, .57) 48%, rgba(8, 18, 39, .8) 100%), url('/assets/elite-glass-hero.png') center/cover;
+      isolation: isolate;
+    }
+    .hero-inner { width: min(1120px, 100%); margin: 0 auto; }
+    .hero-copy { width: min(680px, 100%); color: #fff; }
+    .eyebrow, .section-kicker {
+      margin: 0 0 4px;
+      font: 700 17px/1 Barlow Condensed, sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero .eyebrow { color: var(--blue-light); }
+    h1 {
+      margin: 0;
+      max-width: 680px;
+      font: 800 clamp(42px, 8vw, 76px)/.92 Barlow Condensed, sans-serif;
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .hero-sub { margin: 15px 0 17px; max-width: 640px; font-size: clamp(16px, 2vw, 19px); line-height: 1.5; }
+    .trust-points { display: flex; flex-wrap: wrap; gap: 9px 22px; margin: 0 0 26px; padding: 0; list-style: none; font-size: 13px; font-weight: 700; }
+    .trust-points li::before { content: "✓"; color: var(--blue-light); margin-right: 6px; }
+    .quiz-card {
+      width: min(680px, 100%);
+      min-height: 360px;
+      margin-top: 20px;
+      padding: clamp(24px, 5vw, 40px);
+      border-radius: 20px;
+      background: rgba(255,255,255,.985);
+      box-shadow: var(--shadow);
+    }
+    .progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: #e9e3d6; }
+    .progress-fill { width: 33.333%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--blue-light)); transition: width .25s ease; }
+    .step-label { margin: 13px 0 15px; color: #8a92a4; text-align: center; font: 700 12px/1 Barlow Condensed, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .question-title { margin: 0 0 19px; color: var(--navy); font: 700 clamp(28px, 5vw, 38px)/1 Barlow Condensed, sans-serif; }
+    .options-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .option {
+      min-height: 95px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--ink);
+      background: #fff;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(13, 37, 67, .04);
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+    .option:hover, .option:focus-visible { border-color: var(--blue); background: #f2fbff; transform: translateY(-1px); outline: none; }
+    .option.selected { color: var(--navy); border-color: var(--blue); background: #eaf8fe; }
+    .option svg { width: 23px; height: 23px; color: #278fbd; stroke-width: 2; }
+    .back-button { display: block; margin: 18px auto 0; padding: 8px 14px; border: 0; color: #8a92a4; background: transparent; font-weight: 600; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { position: relative; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { display: block; margin: 0 0 6px; color: var(--navy); font-size: 13px; font-weight: 700; }
+    .field input {
+      width: 100%; height: 52px; padding: 0 14px;
+      border: 1px solid #ccd4df; border-radius: 10px; color: var(--ink); background: #fff;
+    }
+    .field input:focus { border-color: var(--blue); outline: 3px solid rgba(69,185,237,.16); }
+    .field input.invalid { border-color: var(--danger); }
+    .consent-copy { margin: 14px 0; color: #646d7e; font-size: 11px; line-height: 1.5; }
+    .consent-copy a { color: var(--navy); text-decoration: underline; }
+    .submit-button, .cta-button {
+      min-height: 54px; border: 0; border-radius: 6px; color: var(--navy-dark); background: var(--blue-light);
+      font: 800 17px/1 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+      box-shadow: 0 9px 20px rgba(69,185,237,.24); transition: transform .18s ease, background .18s ease;
+    }
+    .submit-button { width: 100%; }
+    .submit-button:hover, .cta-button:hover { background: #91e2fb; transform: translateY(-1px); }
+    .submit-button:disabled { cursor: wait; opacity: .7; transform: none; }
+    .form-error { min-height: 18px; margin: 9px 0; color: var(--danger); font-size: 12px; font-weight: 700; }
+    .thanks { padding: 22px 0 4px; text-align: center; }
+    .thanks-icon { width: 64px; height: 64px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 50%; color: #0f7750; background: #dff6ea; }
+    .thanks h2 { margin: 0 0 9px; color: var(--navy); font: 800 38px/1 Barlow Condensed, sans-serif; text-transform: uppercase; }
+    .thanks p { margin: 0 auto; max-width: 460px; color: var(--muted); line-height: 1.6; }
+    .trust-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 24px max(18px, calc((100vw - 1120px)/2)); background: var(--cream); color: var(--navy); }
+    .trust-item { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-align: center; }
+    .trust-item svg { width: 19px; height: 19px; }
+    .estimate-section { padding: 70px 20px 76px; text-align: center; }
+    .section-kicker { color: var(--navy); }
+    .estimate-section h2 { margin: 10px auto 14px; max-width: 560px; color: var(--navy); font: 800 clamp(38px, 7vw, 58px)/.94 Barlow Condensed, sans-serif; text-transform: uppercase; }
+    .estimate-section p { margin: 0 auto 25px; max-width: 560px; color: var(--muted); line-height: 1.7; }
+    .cta-button { display: inline-grid; place-items: center; min-width: 240px; padding: 0 24px; text-decoration: none; }
+    .site-footer { padding: 36px 20px 30px; border-top: 1px solid #e7dece; color: #6c7382; background: var(--cream); text-align: center; font-size: 12px; line-height: 1.55; }
+    .footer-logo { width: 220px; max-width: 70vw; height: 42px; object-fit: contain; margin-bottom: 12px; }
+    .site-footer strong { display: block; color: var(--navy); font-family: Barlow Condensed, sans-serif; font-size: 16px; letter-spacing: .08em; text-transform: uppercase; }
+    .footer-links { margin-top: 8px; }
+    .footer-links a { margin: 0 5px; }
+    @media (min-width: 860px) {
+      .hero { padding-top: 60px; }
+      .hero-inner { display: grid; grid-template-columns: minmax(0, .92fr) minmax(480px, 1.08fr); gap: 48px; align-items: center; }
+      .quiz-card { margin-top: 0; }
+      .hero-copy { align-self: start; padding-top: 38px; }
+    }
+    @media (max-width: 700px) {
+      .site-header { height: 62px; padding-inline: 16px; }
+      .brand-logo { width: 205px; height: 34px; }
+      .rating { font-size: 12px; }
+      .stars { font-size: 15px; }
+      .hero { min-height: auto; padding: 32px 18px 58px; background-position: 57% center; }
+      .hero-sub { margin-top: 11px; }
+      .trust-points { gap: 7px 13px; }
+      .quiz-card { min-height: 0; border-radius: 17px; }
+      .options-grid { grid-template-columns: 1fr 1fr; }
+      .option { min-height: 86px; padding: 12px 9px; flex-direction: column; gap: 7px; font-size: 13px; text-align: center; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .trust-bar { grid-template-columns: 1fr 1fr; gap: 18px 10px; padding-block: 22px; }
+      .trust-item { font-size: 11px; }
+    }
+    @media (max-width: 410px) {
+      .brand-logo { width: 180px; }
+      .rating .score { display: none; }
+      .quiz-card { padding: 23px 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <img class="brand-logo" src="/assets/logo.svg" alt="Elite Glass & Window">
+    <div class="rating" aria-label="Five star service"><span class="stars">★★★★★</span><span class="score">5.0</span></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow" id="hero-eyebrow">Greater Seattle</p>
+          <h1 id="hero-headline">Custom Shower Glass</h1>
+          <p class="hero-sub" id="hero-subheadline">Custom-measured shower glass for homeowners, property managers, and commercial projects.</p>
+          <ul class="trust-points" id="trust-points"></ul>
+        </div>
+
+        <section class="quiz-card" id="quiz-card" aria-live="polite">
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+          <p class="step-label" id="step-label">Step 1 of 3</p>
+          <div id="quiz-content"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="trust-bar" aria-label="Elite Glass and Window service benefits">
+      <div class="trust-item"><i data-lucide="home"></i><span>Local Glass Specialists</span></div>
+      <div class="trust-item"><i data-lucide="calendar-days"></i><span>Serving Since 2018</span></div>
+      <div class="trust-item"><i data-lucide="badge-check"></i><span>Free Project Estimate</span></div>
+      <div class="trust-item"><i data-lucide="map-pin"></i><span>Greater Seattle Area</span></div>
+    </section>
+
+    <section class="estimate-section">
+      <p class="section-kicker">Free project estimate</p>
+      <h2>Ready for your new shower glass?</h2>
+      <p>Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
+      <a class="cta-button" href="#quiz-card">Start my estimate</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <img class="footer-logo" src="/assets/logo.svg" alt="Elite Glass & Window">
+    <strong>Elite Glass & Window</strong>
+    <div>Custom glass, shower enclosures, windows, and doors for Greater Seattle.</div>
+    <div><a href="tel:+14258908233">(425) 890-8233</a></div>
+    <div class="footer-links" id="footer-links"></div>
+  </footer>
+
+  <script>
+  (() => {
+    'use strict';
+    const C = window.CONFIG || {};
+    const B = C.routeB || {};
+    const answers = {};
+    let currentStep = 1;
+    let submitting = false;
+
+    const content = document.getElementById('quiz-content');
+    const progress = document.getElementById('progress-fill');
+    const stepLabel = document.getElementById('step-label');
+    const footerLinks = Array.isArray(C.footerLinks) ? C.footerLinks : [];
+    const privacyLink = footerLinks.find((link) => link.label === 'Privacy Policy')?.href || '#';
+    const termsLink = footerLinks.find((link) => /Terms/.test(link.label))?.href || '#';
+
+    document.getElementById('hero-eyebrow').textContent = B.eyebrow || 'Greater Seattle';
+    document.getElementById('hero-headline').textContent = B.headline || 'Custom Shower Glass';
+    document.getElementById('hero-subheadline').textContent = B.subheadline || '';
+    document.getElementById('trust-points').innerHTML = (B.trustPoints || []).map((point) => `<li>${escapeHtml(point)}</li>`).join('');
+    document.getElementById('footer-links').innerHTML = footerLinks.map((link) => `<a href="${escapeAttr(link.href)}">${escapeHtml(link.label)}</a>`).join(' · ');
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+    }
+
+    function escapeAttr(value) { return escapeHtml(value); }
+
+    function eventId(kind) {
+      const random = crypto.getRandomValues(new Uint32Array(2));
+      return `evt_${kind}_${Date.now()}_${random[0].toString(36)}${random[1].toString(36)}`;
+    }
+
+    function cookie(name) {
+      return document.cookie.split(';').map((part) => part.trim()).find((part) => part.startsWith(`${name}=`))?.slice(name.length + 1) || '';
+    }
+
+    function attribution() {
+      const params = new URLSearchParams(location.search);
+      const fbclid = params.get('fbclid') || '';
+      return {
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        ad_id: params.get('ad_id') || '',
+        adset_id: params.get('adset_id') || '',
+        campaign_id: params.get('campaign_id') || '',
+        fbclid,
+        fbp: cookie('_fbp'),
+        fbc: cookie('_fbc') || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : ''),
+        source_url: location.href,
+        user_agent: navigator.userAgent,
+      };
+    }
+
+    function loadMetaPixel() {
+      if (!C.metaPixelId || window.fbq) return;
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', C.metaPixelId);
+    }
+
+    async function sendCapi(input) {
+      const response = await fetch('/api/capi', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(input),
+        keepalive: true,
+      });
+      if (!response.ok) throw new Error(`CAPI ${response.status}`);
+      return response.json();
+    }
+
+    function trackPageView() {
+      const id = eventId('page');
+      loadMetaPixel();
+      if (window.fbq) fbq('track', 'PageView', {}, { eventID: id });
+      sendCapi({ event_name: 'PageView', event_id: id, ...attribution() }).catch((error) => console.warn('PageView CAPI failed', error.message));
+    }
+
+    function setStep(step) {
+      currentStep = step;
+      progress.style.width = `${Math.min(100, (step / 3) * 100)}%`;
+      stepLabel.textContent = step < 3 ? `Step ${step} of 3` : 'Final step';
+    }
+
+    function renderQuestion(question, step, canGoBack) {
+      setStep(step);
+      content.innerHTML = `
+        <h2 class="question-title">${escapeHtml(question.label)}</h2>
+        <div class="options-grid">
+          ${question.options.map((option) => `
+            <button class="option" type="button" data-value="${escapeAttr(option.label)}">
+              <i data-lucide="${escapeAttr(option.icon)}" aria-hidden="true"></i>
+              <span>${escapeHtml(option.label)}</span>
+            </button>`).join('')}
+        </div>
+        ${canGoBack ? '<button class="back-button" type="button" id="back-button">Back</button>' : ''}`;
+      if (window.lucide) lucide.createIcons({ root: content });
+      content.querySelectorAll('.option').forEach((button) => {
+        button.addEventListener('click', () => {
+          answers[question.id] = button.dataset.value;
+          button.classList.add('selected');
+          setTimeout(() => step === 1 ? renderProjectQuestion() : renderForm(), 160);
+        });
+      });
+      content.querySelector('#back-button')?.addEventListener('click', renderAudienceQuestion);
+      location.hash = step === 1 ? 'who-you-are' : 'project';
+    }
+
+    function renderAudienceQuestion() {
+      delete answers.property_type;
+      delete answers.project_need;
+      renderQuestion(B.questions.audience, 1, false);
+    }
+
+    function renderProjectQuestion() {
+      const question = answers.property_type === 'Homeowner' ? B.questions.homeowner : B.questions.business;
+      renderQuestion(question, 2, true);
+    }
+
+    function renderForm() {
+      setStep(3);
+      const form = B.form || {};
+      const consent = String(form.consentText || '').replace('{businessName}', C.businessName || 'Elite Glass & Window');
+      content.innerHTML = `
+        <p class="section-kicker" style="text-align:center">${escapeHtml(form.eyebrow || 'Free estimate')}</p>
+        <h2 class="question-title" style="text-align:center;margin-top:8px">${escapeHtml(form.headline || 'Tell us where to reach you')}</h2>
+        <p style="text-align:center;color:var(--muted);font-size:13px;margin:-8px 0 20px">${escapeHtml(form.subtext || '')}</p>
+        <form id="lead-form" novalidate>
+          <div class="contact-grid">
+            <div class="field full"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
+            <div class="field full"><label for="zip">Project ZIP code</label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10" required></div>
+          </div>
+          <p class="consent-copy">${escapeHtml(consent)} See our <a href="${escapeAttr(privacyLink)}" target="_blank" rel="noopener">Privacy Policy</a> and <a href="${escapeAttr(termsLink)}" target="_blank" rel="noopener">Terms of Use</a>.</p>
+          <p class="form-error" id="form-error" role="alert"></p>
+          <button class="submit-button" id="submit-button" type="submit">${escapeHtml(form.ctaLabel || 'Request my free estimate')}</button>
+        </form>
+        <button class="back-button" type="button" id="back-button">Back</button>`;
+      content.querySelector('#back-button').addEventListener('click', renderProjectQuestion);
+      content.querySelector('#lead-form').addEventListener('submit', handleSubmit);
+      location.hash = 'contact';
+    }
+
+    function validateForm(form) {
+      let valid = true;
+      form.querySelectorAll('input[required]').forEach((input) => {
+        const value = input.value.trim();
+        const emailValid = input.type !== 'email' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        const phoneValid = input.name !== 'phone' || input.value.replace(/\D/g, '').length >= 10;
+        const fieldValid = Boolean(value) && emailValid && phoneValid;
+        input.classList.toggle('invalid', !fieldValid);
+        if (!fieldValid) valid = false;
+      });
+      return valid;
+    }
+
+    async function postWebhook(payload) {
+      if (!C.webhookUrl) return;
+      await fetch(C.webhookUrl, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+        mode: 'no-cors',
+      });
+    }
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      if (submitting) return;
+      const form = event.currentTarget;
+      const error = form.querySelector('#form-error');
+      if (!validateForm(form)) {
+        error.textContent = 'Please complete each field with valid contact information.';
+        return;
+      }
+
+      submitting = true;
+      error.textContent = '';
+      const button = form.querySelector('#submit-button');
+      button.disabled = true;
+      button.textContent = 'Sending…';
+
+      const fields = Object.fromEntries(new FormData(form).entries());
+      const tracking = attribution();
+      const leadEventId = eventId('lead');
+      const submittedAt = new Date().toISOString();
+      const payload = {
+        business: C.businessName,
+        lead_source: `${C.businessName} Quiz /b`,
+        funnel_variant: 'B',
+        route: '/b',
+        submitted_at: submittedAt,
+        name: fields.name,
+        email: fields.email,
+        phone: fields.phone,
+        zip: fields.zip,
+        property_type: answers.property_type,
+        project_need: answers.project_need,
+        sms_consent: true,
+        marketing_consent: true,
+        consent_method: 'submit_implied',
+        consent_copy: String(B.form.consentText || '').replace('{businessName}', C.businessName || ''),
+        capi_event_id: leadEventId,
+        ...tracking,
+        contact: fields,
+        quiz_answers: { ...answers },
+        attribution: { ...tracking, lead_event_id: leadEventId },
+      };
+
+      loadMetaPixel();
+      if (window.fbq) fbq('track', 'Lead', {}, { eventID: leadEventId });
+      const deliveries = await Promise.allSettled([
+        sendCapi({ event_name: 'Lead', event_id: leadEventId, ...fields, ...answers, ...tracking }),
+        postWebhook(payload),
+      ]);
+      deliveries.forEach((result, index) => {
+        if (result.status === 'rejected') console.warn(index === 0 ? 'Lead CAPI failed' : 'Lead webhook failed', result.reason?.message || result.reason);
+      });
+
+      renderThanks();
+    }
+
+    function renderThanks() {
+      progress.style.width = '100%';
+      stepLabel.textContent = 'Request received';
+      content.innerHTML = `
+        <div class="thanks">
+          <div class="thanks-icon"><i data-lucide="check" aria-hidden="true"></i></div>
+          <h2>Thank you</h2>
+          <p>Elite Glass & Window received your request and will follow up to discuss your ${escapeHtml(answers.project_need || 'shower glass project')}.</p>
+        </div>`;
+      if (window.lucide) lucide.createIcons({ root: content });
+      location.hash = 'thank-you';
+    }
+
+    window.addEventListener('load', () => {
+      if (window.lucide) lucide.createIcons();
+      renderAudienceQuestion();
+      trackPageView();
+    }, { once: true });
+  })();
+  </script>
+</body>
+</html>

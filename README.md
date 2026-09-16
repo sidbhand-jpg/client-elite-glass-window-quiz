@@ -17,17 +17,20 @@ Pushing to `main` automatically creates a new Cloudflare Pages deployment.
 | Integration | Status | Configuration |
 |---|---|---|
 | Microsoft Clarity | Active | Project ID `yadrhyi60g` |
-| Meta Pixel | Not configured | `metaPixelId` is empty |
-| Lead webhook | Not configured | `webhookUrl` is empty |
-| Immediate AI call | Active demo integration | Form submission starts the Retell call through the imported Telnyx SIP trunk |
+| Meta Pixel | Active | Dataset `1072168465554731`; PageView and Lead use browser/server deduplication IDs |
+| Meta Conversions API | Active on Cloudflare Pages | `/api/capi` hashes contact identifiers server-side; the access token is a Worker secret |
+| Lead webhook | Active | Existing Elite Glass Make webhook |
+| Immediate AI call | Disabled | Quiz submissions use the Make webhook and do not initiate phone routing |
 
-The funnel can be completed while the Meta Pixel or webhook is empty. However, an empty webhook means the submitted lead is not sent to an external CRM or automation platform.
+The Meta access token must never be placed in `config.js`, browser code, Git, logs, or `.env.example`.
 
 ## Project Structure
 
 ```text
-├── index.html                  # Funnel UI, behavior, attribution, and tracking
+├── index.html                  # Existing root and /a funnel UI
+├── b/index.html                # Dedicated conditional shower-glass funnel
 ├── config.js                  # Elite Glass & Window content and integrations
+├── functions/api/capi.js       # Server-side Meta PageView and Lead delivery
 ├── _redirects                 # Cloudflare Pages routes for variants A and B
 ├── README.md                  # Project setup and handoff documentation
 └── assets/
@@ -52,7 +55,9 @@ The landing page introduces Elite Glass & Window, displays project imagery, Goog
 4. Desired timeline
 5. Investment range
 
-The final form collects name, email, phone number, ZIP code, and required call/SMS consent. A successful submission displays the thank-you screen and click-to-call option.
+Route `/b` starts with Homeowner, Property manager, and Commercial. Homeowners then choose New shower glass or Shower glass replacement; property managers and commercial visitors choose New install, Multiple units, or Repair or replace. The final form collects name, email, phone number, and ZIP code.
+
+Route `/b` uses submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
 
 The quiz does not use phone routing. On a valid form submission it posts the payload only to the configured webhook.
 
@@ -63,7 +68,8 @@ The project includes two routes for testing different landing experiences:
 | Route | Variant | Experience |
 |---|---|---|
 | `/a` | A | Direct landing experience without the gallery and review proof sections |
-| `/b` or `/` | B | Landing experience with project gallery and customer reviews |
+| `/b` | B | Dedicated mobile-first shower-glass funnel with conditional audience routing |
+| `/` | Legacy B | Existing five-question landing experience with gallery and review proof |
 
 The active variant is included in tracking events and webhook submissions as `A` or `B`.
 
@@ -87,8 +93,9 @@ npx --yes wrangler@latest pages dev . --port 4173
 
 Then open:
 
-- <http://127.0.0.1:4173/> for variant B
+- <http://127.0.0.1:4173/> for the existing root funnel
 - <http://127.0.0.1:4173/a> for variant A
+- <http://127.0.0.1:4173/b/> for the conditional shower-glass funnel
 
 ## Configuration
 
@@ -167,21 +174,21 @@ These labels can be used in Clarity to analyze step-level funnel activity and dr
 
 ### Meta Pixel
 
-Meta Pixel support is implemented but currently disabled because `metaPixelId` is empty.
-
-Once a valid Pixel ID is added, the funnel fires:
+Meta Pixel dataset `1072168465554731` is configured. Route `/b` fires:
 
 | Event | When | Details |
 |---|---|---|
-| `PageView` | Initial page load | Standard Meta event |
+| `PageView` | Initial page load | Browser Pixel plus server CAPI using the same `event_id` |
 | `FunnelStep` | Each funnel step | Custom event with step label and variant |
-| `Lead` | Valid form submission | Includes `eventID` for CAPI deduplication |
+| `Lead` | Valid form submission | Browser Pixel plus server CAPI using the same `event_id` |
 
-Enable it in `config.js`:
+The public dataset identifier lives in `config.js`:
 
 ```js
-metaPixelId: "YOUR_META_PIXEL_ID"
+metaPixelId: "1072168465554731"
 ```
+
+`functions/api/capi.js` accepts only same-origin `PageView` and `Lead` events, hashes contact identifiers, and reads `META_CAPI_ACCESS_TOKEN` from the Cloudflare Pages secret store. Protected test delivery additionally requires `META_TEST_EVENT_CODE` and `META_TEST_AUTH`.
 
 ### Captured Attribution
 
@@ -255,9 +262,9 @@ The frontend cannot read a response body in `no-cors` mode. Confirm delivery usi
 
 ## Contact Consent
 
-The contact form requires consent for follow-up calls and SMS messages. Its copy is controlled by `smsConsentText`, where `{businessName}` is replaced at runtime.
+Route `/b` has no consent checkbox. Submitting the form records agreement to the visible marketing-call and text-message disclosure. Its route-specific copy is controlled by `routeB.form.consentText`, where `{businessName}` is replaced at runtime.
 
-Keep the `STOP` and `HELP` language intact when editing the disclosure. The configured Privacy Policy and Terms of Use links are displayed with the consent copy and in the footer.
+Keep the automated-technology, consent-not-required, message/data-rate, `STOP`, and `HELP` language intact. Privacy Policy and Terms of Use links are displayed with the disclosure and in the footer.
 
 ## Cloudflare Pages Deployment
 
@@ -279,11 +286,11 @@ Only stage files that are intentionally part of the release. After pushing, veri
 - [x] Google rating summary and selected customer reviews
 - [x] Privacy Policy and Terms of Use links
 - [x] Microsoft Clarity project ID
-- [ ] Lead webhook URL
+- [x] Lead webhook URL
 - [x] Worker provider secrets
 - [ ] Publish the Retell prompt from `lead-router/AGENT_PROMPT.md`
 - [ ] Controlled immediate-call smoke test using an authorized phone
-- [ ] Meta Pixel ID
+- [x] Meta Pixel ID
 - [ ] Real end-to-end lead delivery test
 - [ ] Meta browser and server event deduplication test, if CAPI is enabled
 - [ ] Desktop and mobile visual acceptance after the final deployment

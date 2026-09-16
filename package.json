@@ -1,0 +1,13 @@
+{
+  "name": "client-elite-glass-window-quiz",
+  "version": "1.1.0",
+  "private": true,
+  "scripts": {
+    "check": "node --check config.js && node --check functions/api/capi.js && node scripts/check-site.mjs",
+    "dev": "wrangler pages dev . --port 4173",
+    "deploy": "wrangler pages deploy . --project-name client-elite-glass-window-quiz --branch main"
+  },
+  "devDependencies": {
+    "wrangler": "^4.38.0"
+  }
+}
