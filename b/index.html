@@ -281,6 +281,7 @@
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
       if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
       t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('set', 'autoConfig', false, C.metaPixelId);
       fbq('init', C.metaPixelId);
     }
 
@@ -329,7 +330,6 @@
         });
       });
       content.querySelector('#back-button')?.addEventListener('click', renderAudienceQuestion);
-      location.hash = step === 1 ? 'who-you-are' : 'project';
     }
 
     function renderAudienceQuestion() {
@@ -365,7 +365,6 @@
         <button class="back-button" type="button" id="back-button">Back</button>`;
       content.querySelector('#back-button').addEventListener('click', renderProjectQuestion);
       content.querySelector('#lead-form').addEventListener('submit', handleSubmit);
-      location.hash = 'contact';
     }
 
     function validateForm(form) {
@@ -457,7 +456,6 @@
           <p>Elite Glass & Window received your request and will follow up to discuss your ${escapeHtml(answers.project_need || 'shower glass project')}.</p>
         </div>`;
       if (window.lucide) lucide.createIcons({ root: content });
-      location.hash = 'thank-you';
     }
 
     window.addEventListener('load', () => {

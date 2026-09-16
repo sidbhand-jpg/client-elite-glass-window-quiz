@@ -25,6 +25,7 @@ for (const needle of [
   "fetch('/api/capi'",
   "fbq('track', 'PageView'",
   "fbq('track', 'Lead'",
+  "fbq('set', 'autoConfig', false, C.metaPixelId)",
 ]) {
   if (!routeB.includes(needle) && !config.includes(needle)) throw new Error(`Missing route /b behavior: ${needle}`);
 }
