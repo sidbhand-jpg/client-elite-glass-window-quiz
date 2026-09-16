@@ -1442,6 +1442,12 @@
 
       // ── Populate hidden attribution fields ─────────────────
       const attribution = JSON.parse(sessionStorage.getItem('attribution_data') || '{}');
+      const capiAttribution = {
+        capi_event_name: 'Lead',
+        capi_event_id: attribution.lead_event_id || '',
+        capi_event_time: Math.floor(Date.now() / 1000),
+        capi_action_source: 'website',
+      };
       const hiddenMap = {
         h_utm_source:    attribution.utm_source    || '',
         h_utm_medium:    attribution.utm_medium    || '',
@@ -1485,6 +1491,7 @@
           source_url:    attribution.source_url    || window.location.href,
           user_agent:    attribution.user_agent    || navigator.userAgent,
           lead_event_id: attribution.lead_event_id || '',
+          ...capiAttribution,
         },
         sms_consent: smsCheck ? smsCheck.checked : false,
         sample_record: new URLSearchParams(window.location.search).get('sample_record') === '1'

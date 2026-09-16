@@ -448,6 +448,12 @@
       const tracking = attribution();
       const leadEventId = eventId('lead');
       const submittedAt = new Date().toISOString();
+      const capiAttribution = {
+        capi_event_name: 'Lead',
+        capi_event_id: leadEventId,
+        capi_event_time: Math.floor(Date.now() / 1000),
+        capi_action_source: 'website',
+      };
       const isTest = new URLSearchParams(location.search).get('sample_record') === '1'
         || new URLSearchParams(location.search).get('make_test') === '1';
       const payload = {
@@ -468,11 +474,11 @@
         consent_copy: String(B.form.consentText || '').replace('{businessName}', C.businessName || ''),
         sample_record: isTest,
         lead_event_id: leadEventId,
-        capi_event_id: leadEventId,
+        ...capiAttribution,
         ...tracking,
         contact: fields,
         quiz_answers: { ...answers },
-        attribution: { ...tracking, lead_event_id: leadEventId },
+        attribution: { ...tracking, lead_event_id: leadEventId, ...capiAttribution },
       };
 
       loadMetaPixel();
