@@ -192,6 +192,52 @@ window.CONFIG = {
     }
   },
 
+  routeC: {
+    eyebrow: "Greater Seattle",
+    headline: "Window Replacement & Installation",
+    subheadline: "Custom-measured window replacement and installation for homeowners, property managers, and commercial projects.",
+    trustPoints: [
+      "No-obligation estimate",
+      "Custom measured and installed",
+      "Residential and commercial"
+    ],
+    questions: {
+      audience: {
+        id: "property_type",
+        label: "What describes you?",
+        options: [
+          { label: "Homeowner", icon: "home" },
+          { label: "Property manager", icon: "building-2" },
+          { label: "Commercial", icon: "briefcase-business" }
+        ]
+      },
+      homeowner: {
+        id: "project_need",
+        label: "What window project do you need?",
+        options: [
+          { label: "New window installation", icon: "square-plus" },
+          { label: "Window replacement", icon: "refresh-cw" }
+        ]
+      },
+      business: {
+        id: "project_need",
+        label: "What can we help with?",
+        options: [
+          { label: "New window installation", icon: "square-plus" },
+          { label: "Multiple windows or units", icon: "layers-3" },
+          { label: "Repair or replace", icon: "wrench" }
+        ]
+      }
+    },
+    form: {
+      eyebrow: "Free in-home estimate",
+      headline: "Tell us where to reach you",
+      subtext: "Elite Glass & Window will follow up about your window project.",
+      ctaLabel: "Request my free estimate",
+      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out or HELP for help."
+    }
+  },
+
   form: {
     eyebrow: "Almost done!",
     headline: "Where should we send your free estimate details?",

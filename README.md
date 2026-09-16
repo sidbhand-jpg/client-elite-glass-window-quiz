@@ -29,9 +29,10 @@ The Meta access token must never be placed in `config.js`, browser code, Git, lo
 ```text
 ├── index.html                  # Existing root and /a funnel UI
 ├── b/index.html                # Dedicated conditional shower-glass funnel
+├── c/index.html                # Dedicated conditional window funnel
 ├── config.js                  # Elite Glass & Window content and integrations
 ├── functions/api/capi.js       # Server-side Meta PageView and Lead delivery
-├── _redirects                 # Cloudflare Pages routes for variants A and B
+├── _redirects                 # Cloudflare Pages routes for variants A, B, and C
 ├── README.md                  # Project setup and handoff documentation
 └── assets/
     ├── logo.svg
@@ -57,21 +58,24 @@ The landing page introduces Elite Glass & Window, displays project imagery, Goog
 
 Route `/b` starts with Homeowner, Property manager, and Commercial. Homeowners then choose New shower glass or Shower glass replacement; property managers and commercial visitors choose New install, Multiple units, or Repair or replace. The final form collects name, email, phone number, and ZIP code.
 
-Route `/b` uses submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
+Route `/c` follows the same conditional flow for windows. Homeowners choose New window installation or Window replacement; property managers and commercial visitors choose New window installation, Multiple windows or units, or Repair or replace. It uses the completed Redmond window project as its hero image.
+
+Routes `/b` and `/c` use submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
 
 The quiz does not use phone routing. On a valid form submission it posts the payload only to the configured webhook.
 
 ### Funnel Variants
 
-The project includes two routes for testing different landing experiences:
+The project includes three routes for testing different landing experiences:
 
 | Route | Variant | Experience |
 |---|---|---|
 | `/a` | A | Direct landing experience without the gallery and review proof sections |
 | `/b` | B | Dedicated mobile-first shower-glass funnel with conditional audience routing |
+| `/c` | C | Dedicated mobile-first window funnel with conditional audience routing |
 | `/` | Legacy B | Existing five-question landing experience with gallery and review proof |
 
-The active variant is included in tracking events and webhook submissions as `A` or `B`.
+The active variant is included in tracking events and webhook submissions as `A`, `B`, or `C`.
 
 ## Local Preview
 
@@ -96,6 +100,7 @@ Then open:
 - <http://127.0.0.1:4173/> for the existing root funnel
 - <http://127.0.0.1:4173/a> for variant A
 - <http://127.0.0.1:4173/b/> for the conditional shower-glass funnel
+- <http://127.0.0.1:4173/c/> for the conditional window funnel
 
 ## Configuration
 
@@ -172,7 +177,7 @@ The page uses the following funnel hashes:
 
 These labels can be used in Clarity to analyze step-level funnel activity and drop-off.
 
-Route `/b` uses its own three-step conditional hash sequence:
+Routes `/b` and `/c` use the same three-step conditional hash sequence, with route-specific Clarity event prefixes:
 
 | Route `/b` screen | Hash | Clarity event |
 |---|---|---|
@@ -182,11 +187,11 @@ Route `/b` uses its own three-step conditional hash sequence:
 | Contact form | `#step-3-contact` | `quiz_b_step_3_contact` |
 | Thank-you screen | `#thank-you` | `quiz_b_thank_you` |
 
-Each `/b` render updates `funnelStep`; its one-time custom event records that the visitor reached the screen. Route assignment is recorded as `quiz_path_b`.
+Each render updates `funnelStep`; its one-time custom event records that the visitor reached the screen. Route assignment is recorded as `quiz_path_b` or `quiz_path_c`.
 
 ### Meta Pixel
 
-Meta Pixel dataset `1072168465554731` is configured. Route `/b` fires:
+Meta Pixel dataset `1072168465554731` is configured. Routes `/b` and `/c` fire:
 
 | Event | When | Details |
 |---|---|---|
@@ -273,7 +278,7 @@ The frontend cannot read a response body in `no-cors` mode. Confirm delivery usi
 
 ## Contact Consent
 
-Route `/b` has no consent checkbox. Submitting the form records agreement to the visible marketing-call and text-message disclosure. Its route-specific copy is controlled by `routeB.form.consentText`, where `{businessName}` is replaced at runtime.
+Routes `/b` and `/c` have no consent checkbox. Submitting either form records agreement to the visible marketing-call and text-message disclosure. Their route-specific copy is controlled by `routeB.form.consentText` and `routeC.form.consentText`, where `{businessName}` is replaced at runtime.
 
 Keep the automated-technology, consent-not-required, message/data-rate, `STOP`, and `HELP` language intact. Privacy Policy and Terms of Use links are displayed with the disclosure and in the footer.
 
@@ -282,7 +287,7 @@ Keep the automated-technology, consent-not-required, message/data-rate, `STOP`, 
 This repository is already connected to Cloudflare Pages. Normal release flow:
 
 ```powershell
-git add README.md config.js index.html assets _redirects
+git add README.md config.js index.html b c assets _redirects
 git commit -m "Describe the change"
 git push origin main
 ```
