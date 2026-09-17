@@ -122,11 +122,13 @@ export async function onRequestPost({ request, env }) {
   };
   if (eventName === "Lead") {
     const sourcePath = new URL(sourceUrl).pathname;
-    const contentName = sourcePath.startsWith("/c")
-      ? "Route C window estimate"
-      : sourcePath.startsWith("/b")
-        ? "Route B shower glass estimate"
-        : "Elite Glass & Window estimate quiz";
+    const contentName = sourcePath.startsWith("/d")
+      ? "Route D $300 window offer"
+      : sourcePath.startsWith("/c")
+        ? "Route C window estimate"
+        : sourcePath.startsWith("/b")
+          ? "Route B shower glass estimate"
+          : "Elite Glass & Window estimate quiz";
     event.custom_data = {
       content_name: contentName,
       content_category: String(input.property_type || "").slice(0, 100),

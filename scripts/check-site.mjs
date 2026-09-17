@@ -172,6 +172,8 @@ for (const needle of [
   "event_id: eventId",
   'action_source: "website"',
   'request.headers.get("origin") !== requestUrl.origin',
+  'sourcePath.startsWith("/d")',
+  '"Route D $300 window offer"',
 ]) {
   if (!capi.includes(needle)) throw new Error(`Missing CAPI behavior: ${needle}`);
 }
