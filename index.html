@@ -1610,7 +1610,7 @@
         .replace('{businessName}', C.businessName);
 
       const privacyHref = (C.footerLinks.find(l => l.label === 'Privacy Policy') || { href: '#' }).href;
-      const termsHref   = (C.footerLinks.find(l => l.label === 'Terms of Use')   || { href: '#' }).href;
+      const termsHref   = (C.footerLinks.find(l => /Terms/.test(l.label)) || { href: '#' }).href;
 
       const div = document.createElement('div');
       div.className = 'screen';
@@ -1657,7 +1657,7 @@
           <label class="sms-consent-label" for="sms-consent">
             ${smsText}
             See our <a href="${privacyHref}">Privacy Policy</a>
-            and <a href="${termsHref}">Terms of Use</a>.
+            and <a href="${termsHref}">Terms &amp; Conditions</a>.
           </label>
         </div>
 

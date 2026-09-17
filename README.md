@@ -29,10 +29,10 @@ The Meta access token must never be placed in `config.js`, browser code, Git, lo
 ```text
 ├── index.html                  # Existing root and /a funnel UI
 ├── b/index.html                # Dedicated conditional shower-glass funnel
-├── c/index.html                # Dedicated conditional window funnel
+├── c/index.html                # Shared conditional window funnel for /c and /d
 ├── config.js                  # Elite Glass & Window content and integrations
 ├── functions/api/capi.js       # Server-side Meta PageView and Lead delivery
-├── _redirects                 # Cloudflare Pages routes for variants A, B, and C
+├── _redirects                 # Cloudflare Pages routes for variants A through D
 ├── README.md                  # Project setup and handoff documentation
 └── assets/
     ├── logo.svg
@@ -60,22 +60,25 @@ Route `/b` starts with Homeowner, Property manager, Contractor, and Commercial. 
 
 Route `/c` follows the same conditional flow for windows. Homeowners choose New window installation or Window replacement; property managers, contractors, and commercial visitors choose New window installation, Multiple windows or units, or Repair or replace. It uses the completed Redmond window project as its hero image.
 
-Routes `/b` and `/c` use submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
+Route `/d` uses the same window flow as `/c` and adds the source-backed `$300 per window*` offer. Its visible asterisk states that the starting price is for select Ply Gem window materials only; labor and installation are excluded, other products and project requirements cost more, and final pricing follows product selection and measurements. Offer details are also included in the webhook payload.
+
+Routes `/b`, `/c`, and `/d` use submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
 
 The quiz does not use phone routing. On a valid form submission it posts the payload only to the configured webhook.
 
 ### Funnel Variants
 
-The project includes three routes for testing different landing experiences:
+The project includes four routes for testing different landing experiences:
 
 | Route | Variant | Experience |
 |---|---|---|
 | `/a` | A | Direct landing experience without the gallery and review proof sections |
 | `/b` | B | Dedicated mobile-first shower-glass funnel with conditional audience routing |
 | `/c` | C | Dedicated mobile-first window funnel with conditional audience routing |
+| `/d` | D | Route C window flow with a source-backed `$300 per window*` material-only offer |
 | `/` | Legacy B | Existing five-question landing experience with gallery and review proof |
 
-The active variant is included in tracking events and webhook submissions as `A`, `B`, or `C`.
+The active variant is included in tracking events and webhook submissions as `A`, `B`, `C`, or `D`.
 
 ## Local Preview
 
@@ -101,6 +104,7 @@ Then open:
 - <http://127.0.0.1:4173/a> for variant A
 - <http://127.0.0.1:4173/b/> for the conditional shower-glass funnel
 - <http://127.0.0.1:4173/c/> for the conditional window funnel
+- <http://127.0.0.1:4173/d/> for the window offer funnel
 
 ## Configuration
 
@@ -118,7 +122,7 @@ Edit `config.js` to change project content. The main sections are:
 | `thankYou` | Submission confirmation and call CTA |
 | Tracking fields | Clarity, Meta Pixel, and webhook configuration |
 | `leadRouterUrl` | Deprecated; keep empty to disable phone routing |
-| `footerLinks` | Privacy Policy and Terms of Use destinations |
+| `footerLinks` | Same-site Privacy Policy and Terms & Conditions destinations |
 
 ### Business and Brand Settings
 
@@ -159,7 +163,7 @@ clarityId: "yadrhyi60g"
 The funnel sends these Clarity custom properties:
 
 - `funnelName`: `Elite Glass & Window`
-- `funnelVariant`: `A` or `B`
+- `funnelVariant`: `A`, `B`, `C`, or `D`
 - `funnelStep`: the current hash-based step label
 
 The page uses the following funnel hashes:
@@ -177,7 +181,7 @@ The page uses the following funnel hashes:
 
 These labels can be used in Clarity to analyze step-level funnel activity and drop-off.
 
-Routes `/b` and `/c` use the same three-step conditional hash sequence, with route-specific Clarity event prefixes:
+Routes `/b`, `/c`, and `/d` use the same three-step conditional hash sequence, with route-specific Clarity event prefixes:
 
 | Route `/b` screen | Hash | Clarity event |
 |---|---|---|
@@ -187,11 +191,11 @@ Routes `/b` and `/c` use the same three-step conditional hash sequence, with rou
 | Contact form | `#step-3-contact` | `quiz_b_step_3_contact` |
 | Thank-you screen | `#thank-you` | `quiz_b_thank_you` |
 
-Each render updates `funnelStep`; its one-time custom event records that the visitor reached the screen. Route assignment is recorded as `quiz_path_b` or `quiz_path_c`.
+Each render updates `funnelStep`; its one-time custom event records that the visitor reached the screen. Route assignment is recorded as `quiz_path_b`, `quiz_path_c`, or `quiz_path_d`.
 
 ### Meta Pixel
 
-Meta Pixel dataset `1072168465554731` is configured. Routes `/b` and `/c` fire:
+Meta Pixel dataset `1072168465554731` is configured. Routes `/b`, `/c`, and `/d` fire:
 
 | Event | When | Details |
 |---|---|---|
@@ -278,16 +282,16 @@ Confirm delivery using the receiving platform's execution log and a real test su
 
 ## Contact Consent
 
-Routes `/b` and `/c` have no consent checkbox. Submitting either form records agreement to the visible marketing-call and text-message disclosure. Their route-specific copy is controlled by `routeB.form.consentText` and `routeC.form.consentText`, where `{businessName}` is replaced at runtime.
+Routes `/b`, `/c`, and `/d` have no consent checkbox. Submitting any of these forms records agreement to the visible marketing-call and text-message disclosure. Their route-specific copy is controlled by `routeB.form.consentText` and `routeC.form.consentText`, where `{businessName}` is replaced at runtime; `/d` inherits the `/c` disclosure.
 
-Keep the automated-technology, consent-not-required, message/data-rate, `STOP`, and `HELP` language intact. Privacy Policy and Terms of Use links are displayed with the disclosure and in the footer.
+Keep the automated-technology, consent-not-required, message/data-rate, `STOP`, and `HELP` language intact. Privacy Policy and Terms & Conditions links are displayed with the disclosure and in the footer. Both legal pages are hosted inside this quiz at `/privacy-policy/` and `/terms/`.
 
 ## Cloudflare Pages Deployment
 
 This repository is already connected to Cloudflare Pages. Normal release flow:
 
 ```powershell
-git add README.md config.js index.html b c assets _redirects
+git add README.md config.js index.html b c assets privacy-policy terms legal.css _redirects
 git commit -m "Describe the change"
 git push origin main
 ```
@@ -300,7 +304,7 @@ Only stage files that are intentionally part of the release. After pushing, veri
 - [x] Local logo, favicon, hero, gallery, and question imagery
 - [x] Five glass and window project questions
 - [x] Google rating summary and selected customer reviews
-- [x] Privacy Policy and Terms of Use links
+- [x] Same-site Privacy Policy and Terms & Conditions pages
 - [x] Microsoft Clarity project ID
 - [x] Lead webhook URL
 - [x] Worker provider secrets

@@ -189,7 +189,7 @@ window.CONFIG = {
       headline: "Tell us where to reach you",
       subtext: "Elite Glass & Window will follow up about your shower glass project.",
       ctaLabel: "Request my free estimate",
-      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out or HELP for help."
+      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help."
     }
   },
 
@@ -236,7 +236,27 @@ window.CONFIG = {
       headline: "Tell us where to reach you",
       subtext: "Elite Glass & Window will follow up about your window project.",
       ctaLabel: "Request my free estimate",
-      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out or HELP for help."
+      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help."
+    }
+  },
+
+  routeD: {
+    pageTitle: "$300 Per Window Offer | Elite Glass & Window",
+    metaDescription: "Request a free estimate for select Ply Gem window materials starting at $300 per window from Elite Glass & Window in Greater Seattle.",
+    eyebrow: "Greater Seattle Window Offer",
+    headline: "Windows From $300 Per Window",
+    subheadline: "Explore budget-friendly Ply Gem window options for your Greater Seattle property.",
+    offer: {
+      name: "$300 per window offer",
+      display: "$300 per window*",
+      disclaimer: "*Starting price applies to select Ply Gem window materials only. Labor and installation are not included. Other brands, sizes, styles, configurations, and project requirements cost more. Subject to availability; final pricing is confirmed after product selection and measurements."
+    },
+    bottomHeadline: "See Which Windows Fit Your Project",
+    bottomCopy: "Tell us about your property and window needs. Our team will confirm product options, measurements, and complete installed pricing.",
+    form: {
+      eyebrow: "Free window estimate",
+      headline: "See Which Options Fit Your Project",
+      subtext: "Elite Glass & Window will confirm product eligibility, measurements, and complete installed pricing."
     }
   },
 
@@ -266,9 +286,9 @@ window.CONFIG = {
   metaPixelId: "1072168465554731",
   webhookUrl: "https://hook.us2.make.com/qxerkrrp1yt9b7jl76z82mlfzi3uop3m",
   leadRouterUrl: "",
-  smsConsentText: "I agree to receive calls and SMS messages from {businessName} about my estimate request. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
+  smsConsentText: "I agree to receive calls and SMS messages from {businessName} about my estimate request. Consent is not a condition of purchase. Message frequency varies. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
   footerLinks: [
-    { label: "Privacy Policy", href: "https://eliteglassandwindow.com/privacy-policy.html" },
-    { label: "Terms of Use", href: "https://eliteglassandwindow.com/terms.html" }
+    { label: "Privacy Policy", href: "/privacy-policy/" },
+    { label: "Terms & Conditions", href: "/terms/" }
   ]
 };

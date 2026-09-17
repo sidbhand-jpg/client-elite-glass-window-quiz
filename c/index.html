@@ -73,9 +73,21 @@
       letter-spacing: -.02em;
       text-transform: uppercase;
     }
+    .offer-asterisk { margin-left: 2px; font-size: .42em; line-height: 1; vertical-align: top; }
     .hero-sub { margin: 15px 0 17px; max-width: 640px; font-size: clamp(16px, 2vw, 19px); line-height: 1.5; }
     .trust-points { display: flex; flex-wrap: wrap; gap: 9px 22px; margin: 0 0 26px; padding: 0; list-style: none; font-size: 13px; font-weight: 700; }
     .trust-points li::before { content: "✓"; color: var(--blue-light); margin-right: 6px; }
+    .offer-disclaimer {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 13px 15px;
+      border-left: 3px solid var(--blue);
+      color: var(--muted);
+      background: #f4f9fc;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .offer-disclaimer-section { padding: 22px 20px 0; background: #fff; }
     .quiz-card {
       width: min(680px, 100%);
       min-height: 360px;
@@ -211,10 +223,14 @@
       <div class="trust-item"><i data-lucide="map-pin"></i><span>Greater Seattle Area</span></div>
     </section>
 
+    <section class="offer-disclaimer-section" id="offer-disclaimer-section" aria-label="Offer details" hidden>
+      <p class="offer-disclaimer" id="offer-disclaimer"></p>
+    </section>
+
     <section class="estimate-section">
       <p class="section-kicker">Free project estimate</p>
-      <h2>Ready for new or replacement windows?</h2>
-      <p>Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
+      <h2 id="bottom-headline">Ready for new or replacement windows?</h2>
+      <p id="bottom-copy">Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
       <a class="cta-button" id="estimate-cta" href="#step-1-property-type">Start my estimate</a>
     </section>
   </main>
@@ -231,7 +247,15 @@
   (() => {
     'use strict';
     const C = window.CONFIG || {};
-    const V = C.routeC || {};
+    const isOfferRoute = /^\/d(?:\/|$)/.test(location.pathname);
+    const variant = isOfferRoute ? 'D' : 'C';
+    const variantSlug = variant.toLowerCase();
+    const routePath = isOfferRoute ? '/d' : '/c';
+    const routeC = C.routeC || {};
+    const routeD = C.routeD || {};
+    const V = isOfferRoute
+      ? { ...routeC, ...routeD, form: { ...(routeC.form || {}), ...(routeD.form || {}) } }
+      : routeC;
     const answers = {};
     const trackedClaritySteps = new Set();
     let currentStep = 1;
@@ -246,10 +270,27 @@
 
     document.documentElement.style.setProperty('--secondary-dark', C.colors?.primaryDark || '#002f5f');
 
+    if (V.pageTitle) document.title = V.pageTitle;
+    if (V.metaDescription) document.querySelector('meta[name="description"]')?.setAttribute('content', V.metaDescription);
+
     document.getElementById('hero-eyebrow').textContent = V.eyebrow || 'Greater Seattle';
-    document.getElementById('hero-headline').textContent = V.headline || 'Window Replacement & Installation';
+    const heroHeadline = document.getElementById('hero-headline');
+    heroHeadline.textContent = V.headline || 'Window Replacement & Installation';
+    if (V.offer?.display) {
+      const asterisk = document.createElement('sup');
+      asterisk.className = 'offer-asterisk';
+      asterisk.textContent = '*';
+      heroHeadline.append(asterisk);
+    }
     document.getElementById('hero-subheadline').textContent = V.subheadline || '';
     document.getElementById('trust-points').innerHTML = (V.trustPoints || []).map((point) => `<li>${escapeHtml(point)}</li>`).join('');
+    const offerDisclaimer = document.getElementById('offer-disclaimer');
+    if (V.offer?.disclaimer) {
+      offerDisclaimer.textContent = V.offer.disclaimer;
+      document.getElementById('offer-disclaimer-section').hidden = false;
+    }
+    document.getElementById('bottom-headline').textContent = V.bottomHeadline || 'Ready for new or replacement windows?';
+    document.getElementById('bottom-copy').textContent = V.bottomCopy || 'Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.';
     document.getElementById('footer-links').innerHTML = footerLinks.map((link) => `<a href="${escapeAttr(link.href)}">${escapeHtml(link.label)}</a>`).join(' · ');
 
     function escapeHtml(value) {
@@ -304,13 +345,13 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window,document,'clarity','script',C.clarityId);
       clarity('set', 'funnelName', C.businessName || 'Elite Glass & Window');
-      clarity('set', 'funnelVariant', 'C');
-      clarity('event', 'quiz_path_c');
+      clarity('set', 'funnelVariant', variant);
+      clarity('event', `quiz_path_${variantSlug}`);
     }
 
     function trackQuizStep(hash) {
       const label = hash.replace(/^#/, '');
-      const eventName = `quiz_c_${label.replace(/-/g, '_')}`;
+      const eventName = `quiz_${variantSlug}_${label.replace(/-/g, '_')}`;
       if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
       if (!window.clarity) return;
       clarity('set', 'funnelStep', label);
@@ -397,7 +438,7 @@
             <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
             <div class="field full"><label for="zip">Project ZIP code</label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10" required></div>
           </div>
-          <p class="consent-copy">${escapeHtml(consent)} See our <a href="${escapeAttr(privacyLink)}" target="_blank" rel="noopener">Privacy Policy</a> and <a href="${escapeAttr(termsLink)}" target="_blank" rel="noopener">Terms of Use</a>.</p>
+          <p class="consent-copy">${escapeHtml(consent)} See our <a href="${escapeAttr(privacyLink)}" target="_blank" rel="noopener">Privacy Policy</a> and <a href="${escapeAttr(termsLink)}" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p>
           <p class="form-error" id="form-error" role="alert"></p>
           <button class="submit-button" id="submit-button" type="submit">${escapeHtml(form.ctaLabel || 'Request my free estimate')}</button>
         </form>
@@ -458,9 +499,9 @@
         || new URLSearchParams(location.search).get('make_test') === '1';
       const payload = {
         business: C.businessName,
-        lead_source: isTest ? `TEST ONLY - ${C.businessName} Quiz /c` : `${C.businessName} Quiz /c`,
-        funnel_variant: 'C',
-        route: '/c',
+        lead_source: isTest ? `TEST ONLY - ${C.businessName} Quiz ${routePath}` : `${C.businessName} Quiz ${routePath}`,
+        funnel_variant: variant,
+        route: routePath,
         submitted_at: submittedAt,
         name: fields.name,
         email: fields.email,
@@ -472,6 +513,9 @@
         marketing_consent: true,
         consent_method: 'submit_implied',
         consent_copy: String(V.form.consentText || '').replace('{businessName}', C.businessName || ''),
+        offer_name: V.offer?.name || '',
+        offer_display: V.offer?.display || '',
+        offer_disclaimer: V.offer?.disclaimer || '',
         sample_record: isTest,
         lead_event_id: leadEventId,
         ...capiAttribution,

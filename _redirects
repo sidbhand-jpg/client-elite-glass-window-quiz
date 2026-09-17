@@ -1,3 +1,7 @@
 /a  /index.html  200
 /b  /b/  301
 /c  /c/  301
+/d  /d/  301
+/privacy-policy  /privacy-policy/  301
+/terms  /terms/  301
+/d/*  /c/:splat  200
