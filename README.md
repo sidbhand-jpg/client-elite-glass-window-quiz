@@ -56,9 +56,9 @@ The landing page introduces Elite Glass & Window, displays project imagery, Goog
 4. Desired timeline
 5. Investment range
 
-Route `/b` starts with Homeowner, Property manager, and Commercial. Homeowners then choose New shower glass or Shower glass replacement; property managers and commercial visitors choose New install, Multiple units, or Repair or replace. The final form collects name, email, phone number, and ZIP code.
+Route `/b` starts with Homeowner, Property manager, Contractor, and Commercial. Homeowners then choose New shower glass or Shower glass replacement; property managers, contractors, and commercial visitors choose New install, Multiple units, or Repair or replace. The final form collects name, email, phone number, and ZIP code.
 
-Route `/c` follows the same conditional flow for windows. Homeowners choose New window installation or Window replacement; property managers and commercial visitors choose New window installation, Multiple windows or units, or Repair or replace. It uses the completed Redmond window project as its hero image.
+Route `/c` follows the same conditional flow for windows. Homeowners choose New window installation or Window replacement; property managers, contractors, and commercial visitors choose New window installation, Multiple windows or units, or Repair or replace. It uses the completed Redmond window project as its hero image.
 
 Routes `/b` and `/c` use submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
 

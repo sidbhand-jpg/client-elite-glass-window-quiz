@@ -21,6 +21,7 @@ for (const needle of [
   "What describes you?",
   "Homeowner",
   "Property manager",
+  "Contractor",
   "Commercial",
   "New shower glass",
   "Shower glass replacement",
@@ -51,6 +52,9 @@ for (const needle of [
 }
 
 if (!config.includes('metaPixelId: "1072168465554731"')) throw new Error("Meta Pixel ID is not configured.");
+if ((config.match(/\{ label: "Contractor", icon: "hard-hat" \}/g) || []).length !== 2) {
+  throw new Error("Contractor must be configured once in each of routes /b and /c.");
+}
 if (!redirects.includes("/b  /b/  301") || redirects.includes("/b/ /index.html")) throw new Error("Route /b redirect is not isolated.");
 
 for (const needle of [
@@ -58,6 +62,7 @@ for (const needle of [
   "What describes you?",
   "Homeowner",
   "Property manager",
+  "Contractor",
   "Commercial",
   "New window installation",
   "Window replacement",

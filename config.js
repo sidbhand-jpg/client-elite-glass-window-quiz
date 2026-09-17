@@ -149,7 +149,7 @@ window.CONFIG = {
   routeB: {
     eyebrow: "Greater Seattle",
     headline: "Custom Shower Glass",
-    subheadline: "Custom-measured shower glass for homeowners, property managers, and commercial projects.",
+    subheadline: "Custom-measured shower glass for homeowners, property managers, contractors, and commercial projects.",
     trustPoints: [
       "No-obligation estimate",
       "Custom measured and installed",
@@ -162,6 +162,7 @@ window.CONFIG = {
         options: [
           { label: "Homeowner", icon: "home" },
           { label: "Property manager", icon: "building-2" },
+          { label: "Contractor", icon: "hard-hat" },
           { label: "Commercial", icon: "briefcase-business" }
         ]
       },
@@ -195,7 +196,7 @@ window.CONFIG = {
   routeC: {
     eyebrow: "Greater Seattle",
     headline: "Window Replacement & Installation",
-    subheadline: "Custom-measured window replacement and installation for homeowners, property managers, and commercial projects.",
+    subheadline: "Custom-measured window replacement and installation for homeowners, property managers, contractors, and commercial projects.",
     trustPoints: [
       "No-obligation estimate",
       "Custom measured and installed",
@@ -208,6 +209,7 @@ window.CONFIG = {
         options: [
           { label: "Homeowner", icon: "home" },
           { label: "Property manager", icon: "building-2" },
+          { label: "Contractor", icon: "hard-hat" },
           { label: "Commercial", icon: "briefcase-business" }
         ]
       },
