@@ -748,6 +748,236 @@
     /* ── Util ── */
     .text-center { text-align: center; }
     .hidden { display: none !important; }
+
+    /* Shared route shell: keep the main funnel visually aligned with /b and /c. */
+    .lander-screen {
+      min-height: auto;
+      display: block;
+      background: #fff;
+    }
+    .lander-topbar,
+    .topbar {
+      min-height: 68px;
+      padding: 12px max(18px, calc((100vw - 1310px) / 2));
+      background: #fff;
+      border: 0;
+    }
+    .lander-logo-img,
+    .logo-img { height: 42px; margin-right: 0; }
+    .lander-hero {
+      min-height: 665px;
+      padding: 60px max(18px, calc((100vw - 1120px) / 2));
+      display: flex;
+      align-items: center;
+      background:
+        linear-gradient(180deg, rgba(8, 18, 39, .82) 0%, rgba(8, 18, 39, .57) 48%, rgba(8, 18, 39, .8) 100%),
+        url('/assets/elite-glass-hero.png') center / cover;
+    }
+    .lander-hero-inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(480px, 1.08fr);
+      gap: 48px;
+      align-items: center;
+    }
+    .route-hero-copy { color: #fff; }
+    .route-eyebrow {
+      margin-bottom: 12px;
+      color: #5fd0f5;
+      font-family: var(--heading-font);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .route-hero-copy h1 {
+      max-width: 560px;
+      margin: 0 0 18px;
+      color: #fff;
+      font-family: var(--heading-font);
+      font-size: clamp(48px, 5.5vw, 72px);
+      font-weight: 700;
+      letter-spacing: -.025em;
+      line-height: .98;
+      text-transform: uppercase;
+    }
+    .route-hero-copy > p:not(.route-eyebrow) {
+      max-width: 560px;
+      font-size: clamp(16px, 2vw, 19px);
+      line-height: 1.5;
+    }
+    .route-trust-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      margin-top: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .route-trust-points span::before { content: '\2713'; margin-right: 6px; color: #5fd0f5; }
+    .lander-body {
+      max-width: none;
+      margin: 0;
+      padding: 38px 40px;
+      align-items: stretch;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .985);
+      box-shadow: 0 22px 52px rgba(1, 12, 30, .28);
+      text-align: left;
+    }
+    .lander-badge {
+      align-self: stretch;
+      justify-content: center;
+      margin-bottom: 18px;
+      border: 0;
+      border-radius: 0;
+      border-top: 5px solid #19a5e3;
+      padding: 15px 0 0;
+      color: #77849a;
+      background: transparent;
+      font-family: var(--heading-font);
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+    .lander-headline {
+      margin-bottom: 12px;
+      color: #0a3563;
+      font-size: clamp(30px, 3.1vw, 41px);
+      line-height: 1.08;
+      text-transform: uppercase;
+    }
+    .lander-headline span { color: inherit; }
+    .lander-sub { margin-bottom: 20px; color: #526071; font-size: 15px; line-height: 1.6; }
+    .crew-photo-wrap { display: none; }
+    .lander-bullets { gap: 8px; margin-bottom: 24px; }
+    .lander-bullet { color: #1e293b; font-size: 13px; }
+    .lander-cta {
+      min-height: 54px;
+      margin-bottom: 13px;
+      padding: 15px 22px;
+      border-radius: 6px;
+      color: #073762;
+      background: #5fd0f5;
+      box-shadow: 0 9px 20px rgba(69, 185, 237, .24);
+      font-size: 16px;
+    }
+    .lander-cta:hover { color: #073762; background: #91e2fb; box-shadow: 0 11px 26px rgba(69, 185, 237, .3); }
+    .lander-trust { color: #7b8797; text-align: center; }
+
+    .route-trust-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 24px max(18px, calc((100vw - 1120px) / 2));
+      color: #fff;
+      background: #073762;
+    }
+    .route-trust-item { display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 12px; font-weight: 700; }
+    .route-trust-item svg { width: 19px; height: 19px; color: #5fd0f5; }
+    .quiz-route-trust { display: none; }
+    .quiz-route-trust.visible { display: grid; }
+
+    .quiz-chrome.visible { display: block; }
+    .progress-bar-wrap { height: 5px; background: #dceaf5; }
+    .progress-bar-fill { background: linear-gradient(90deg, #19a5e3, #5fd0f5); }
+    .funnel-wrap {
+      max-width: none;
+      min-height: 665px;
+      margin: 0;
+      padding: 60px max(18px, calc((100vw - 1120px) / 2));
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(480px, 1.08fr);
+      gap: 48px;
+      align-items: center;
+      background:
+        linear-gradient(180deg, rgba(8, 18, 39, .82) 0%, rgba(8, 18, 39, .57) 48%, rgba(8, 18, 39, .8) 100%),
+        url('/assets/elite-glass-hero.png') center / cover;
+    }
+    #screen-container {
+      width: 100%;
+      min-height: 384px;
+      padding: 34px 40px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .985);
+      box-shadow: 0 22px 52px rgba(1, 12, 30, .28);
+    }
+    .q-progress-label {
+      margin: 0 0 14px;
+      color: #77849a;
+      font-family: var(--heading-font);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .q-headline,
+    .form-headline,
+    .thankyou-headline { color: #0a3563; text-transform: uppercase; }
+    .q-headline { font-size: clamp(28px, 3vw, 36px); }
+    .option-card,
+    .option-btn { border-color: #d7e1eb; border-radius: 12px; background: #fff; box-shadow: 0 5px 16px rgba(15, 23, 42, .06); }
+    .option-card-label { background: #0a3563; }
+    .option-card.selected .option-card-label { background: #073762; }
+    .option-btn.selected,
+    .option-btn:hover { border-color: #19a5e3; background: #f2fbff; }
+    .option-btn .option-icon { color: #159bd5; background: #eaf8fe; }
+    .option-btn:hover .option-icon,
+    .option-btn.selected .option-icon { background: #19a5e3; }
+    .btn-primary,
+    .btn-call { border-radius: 6px; color: #073762; background: #5fd0f5; box-shadow: 0 9px 20px rgba(69, 185, 237, .24); }
+    .btn-primary:hover,
+    .btn-call:hover { color: #073762; background: #91e2fb; }
+    .thankyou-wrap { padding-top: 10px; }
+
+    .proof-section { background: #fff; }
+    .proof-section.alt { background: #f7fafc; }
+    .section-eyebrow { color: #159bd5; font-family: var(--heading-font); }
+    .section-title { color: #0a3563; text-transform: uppercase; }
+    .bottom-proof-cta { background: #073762; }
+    footer {
+      margin-top: 0;
+      padding: 36px 20px 30px;
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      color: #fff;
+      background: #073762;
+    }
+    .footer-links a { color: rgba(255, 255, 255, .78); }
+    .footer-copy,
+    .marketing-credit { color: rgba(255, 255, 255, .58); }
+
+    @media (max-width: 860px) {
+      .lander-hero,
+      .funnel-wrap { min-height: auto; padding: 38px 18px 56px; background-position: 57% center; }
+      .lander-hero-inner,
+      .funnel-wrap { grid-template-columns: 1fr; gap: 28px; }
+      .route-hero-copy { text-align: center; }
+      .route-hero-copy h1,
+      .route-hero-copy > p:not(.route-eyebrow) { margin-left: auto; margin-right: auto; }
+      .route-trust-points { justify-content: center; }
+      .lander-body,
+      #screen-container { width: min(600px, 100%); margin: 0 auto; }
+      .route-trust-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .lander-topbar,
+      .topbar { min-height: 64px; padding: 11px 16px; }
+      .lander-logo-img,
+      .logo-img { height: 38px; }
+      .lander-hero,
+      .funnel-wrap { padding: 32px 16px 46px; }
+      .route-hero-copy h1 { font-size: 43px; }
+      .route-hero-copy > p:not(.route-eyebrow) { font-size: 16px; }
+      .route-trust-points { gap: 8px 14px; font-size: 12px; }
+      .lander-body,
+      #screen-container { padding: 26px 20px; border-radius: 17px; }
+      .lander-headline { font-size: 31px; }
+      .route-trust-bar { gap: 14px 10px; padding: 20px 14px; }
+      .route-trust-item { font-size: 10px; }
+      .route-trust-item svg { width: 17px; height: 17px; }
+      .options-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+      .option-card-label { min-height: 52px; font-size: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -766,23 +996,44 @@
       </div>
     </div>
 
-    <!-- Lander content -->
-    <div class="lander-body">
-      <div class="lander-badge" id="lander-badge"></div>
-      <h1 class="lander-headline" id="lander-headline"></h1>
-      <p  class="lander-sub"      id="lander-sub"></p>
+    <div class="lander-hero">
+      <div class="lander-hero-inner">
+        <div class="route-hero-copy">
+          <p class="route-eyebrow">Greater Seattle</p>
+          <h1>Glass, Windows &amp; Doors</h1>
+          <p>Custom-measured solutions for homeowners, property managers, and commercial projects.</p>
+          <div class="route-trust-points">
+            <span>No-obligation estimate</span>
+            <span>Custom measured and installed</span>
+            <span>Residential and commercial</span>
+          </div>
+        </div>
 
-      <!-- Crew photo -->
-      <div class="crew-photo-wrap" id="crew-photo-wrap"></div>
+        <!-- Lander content -->
+        <div class="lander-body">
+          <div class="lander-badge" id="lander-badge"></div>
+          <h2 class="lander-headline" id="lander-headline"></h2>
+          <p class="lander-sub" id="lander-sub"></p>
 
-      <!-- Bullet trust points -->
-      <div class="lander-bullets" id="lander-bullets"></div>
+          <!-- Kept for config compatibility; the shared hero uses the image as its background. -->
+          <div class="crew-photo-wrap" id="crew-photo-wrap"></div>
 
-      <!-- CTA button -->
-      <button class="lander-cta" id="lander-cta"></button>
-      <p class="lander-trust" id="lander-trust"></p>
+          <!-- Bullet trust points -->
+          <div class="lander-bullets" id="lander-bullets"></div>
+
+          <!-- CTA button -->
+          <button class="lander-cta" id="lander-cta"></button>
+          <p class="lander-trust" id="lander-trust"></p>
+        </div>
+      </div>
     </div>
 
+    <div class="route-trust-bar" aria-label="Why choose Elite Glass and Window">
+      <div class="route-trust-item"><i data-lucide="house" aria-hidden="true"></i><span>Local Glass Specialists</span></div>
+      <div class="route-trust-item"><i data-lucide="calendar-days" aria-hidden="true"></i><span>Serving Since 2018</span></div>
+      <div class="route-trust-item"><i data-lucide="badge-check" aria-hidden="true"></i><span>Free Project Estimate</span></div>
+      <div class="route-trust-item"><i data-lucide="map-pin" aria-hidden="true"></i><span>Greater Seattle Area</span></div>
+    </div>
   </div>
 
   <!-- Type B funnel proof: visitors can explore before starting the quiz -->
@@ -852,8 +1103,25 @@
        QUIZ FUNNEL — questions, form, thank you
   ============================================================ -->
   <main class="funnel-wrap hidden" id="funnel-wrap">
+    <div class="route-hero-copy">
+      <p class="route-eyebrow">Greater Seattle</p>
+      <h1>Glass, Windows &amp; Doors</h1>
+      <p>Tell us about your project and get a free, no-obligation estimate from a local specialist.</p>
+      <div class="route-trust-points">
+        <span>Fast five-question form</span>
+        <span>Custom project guidance</span>
+        <span>No-obligation estimate</span>
+      </div>
+    </div>
     <div id="screen-container"></div>
   </main>
+
+  <div class="route-trust-bar quiz-route-trust" id="quiz-trust-bar" aria-label="Why choose Elite Glass and Window">
+    <div class="route-trust-item"><i data-lucide="house" aria-hidden="true"></i><span>Local Glass Specialists</span></div>
+    <div class="route-trust-item"><i data-lucide="calendar-days" aria-hidden="true"></i><span>Serving Since 2018</span></div>
+    <div class="route-trust-item"><i data-lucide="badge-check" aria-hidden="true"></i><span>Free Project Estimate</span></div>
+    <div class="route-trust-item"><i data-lucide="map-pin" aria-hidden="true"></i><span>Greater Seattle Area</span></div>
+  </div>
 
   <!-- ============================================================
        FOOTER
@@ -1054,6 +1322,8 @@
         <p>${item.text}</p>
       </article>`).join('');
     renderIcons(document.getElementById('proof-sections'));
+    renderIcons(document.getElementById('lander-screen'));
+    renderIcons(document.getElementById('quiz-trust-bar'));
 
     // Crew photo or placeholder
     const photoWrap = document.getElementById('crew-photo-wrap');
@@ -1189,6 +1459,7 @@
       document.getElementById('proof-sections').classList.add('hidden');
       document.getElementById('quiz-chrome').classList.add('visible');
       document.getElementById('funnel-wrap').classList.remove('hidden');
+      document.getElementById('quiz-trust-bar').classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       currentStep = 1;
       renderStep(1);
@@ -1215,6 +1486,7 @@
           document.getElementById('proof-sections').classList.remove('hidden');
           document.getElementById('quiz-chrome').classList.remove('visible');
           document.getElementById('funnel-wrap').classList.add('hidden');
+          document.getElementById('quiz-trust-bar').classList.remove('visible');
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }

@@ -20,7 +20,7 @@ window.CONFIG = {
     landerGradFrom: "#F7FAFC",
     landerGradTo: "#DCEAF5"
   },
-  headingFont: "Sora",
+  headingFont: "Oswald",
   bodyFont: "Inter",
 
   lander: {
