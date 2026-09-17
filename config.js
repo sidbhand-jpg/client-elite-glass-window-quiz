@@ -245,7 +245,7 @@ window.CONFIG = {
     metaDescription: "Request a free estimate for select Ply Gem window materials starting at $300 per window from Elite Glass & Window in Greater Seattle.",
     eyebrow: "Greater Seattle Window Offer",
     headline: "Windows From $300 Per Window",
-    subheadline: "Explore budget-friendly Ply Gem window options for your Greater Seattle property.",
+    subheadline: "Explore window options tailored to your Greater Seattle property, style, and budget.",
     offer: {
       name: "$300 per window offer",
       display: "$300 per window*",
