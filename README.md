@@ -2,7 +2,7 @@
 
 A standalone, config-driven lead-generation quiz for Elite Glass & Window. It helps residential and commercial prospects identify their project needs and request a free estimate.
 
-The funnel is a static site with no build step. Business details, brand styling, proof content, questions, tracking IDs, and lead-delivery settings are stored in `config.js`.
+The deployed funnel is a static site. Business details, brand styling, proof content, questions, tracking IDs, and lead-delivery settings are stored in `config.js`. A local asset-generation command creates the committed responsive image variants used by the pages.
 
 ## Live Project
 
@@ -105,6 +105,30 @@ Then open:
 - <http://127.0.0.1:4173/b/> for the conditional shower-glass funnel
 - <http://127.0.0.1:4173/c/> for the conditional window funnel
 - <http://127.0.0.1:4173/d/> for the window offer funnel
+
+## Performance Assets
+
+Original PNG and JPEG files are retained as browser fallbacks. Production markup prefers responsive AVIF, then WebP, with explicit dimensions to avoid layout movement. The root gallery assigns image URLs only when the carousel approaches the viewport and loads only the current and next slide.
+
+After replacing a source image, update its versioned mapping in `scripts/optimize-assets.mjs` when appropriate and regenerate the committed variants:
+
+```powershell
+npm install
+npm run optimize:assets
+npm run check
+```
+
+Do not hand-edit files under `assets/optimized/`. The generator strips metadata and uses AVIF quality 50 and WebP quality 78. Hero sources target 640, 960, and 1440 pixels where the original resolution permits; gallery and option sources target 480 and 960 pixels without upscaling.
+
+`npm run optimize:assets` also rebuilds the pinned local Lucide subset from the icon names in `scripts/build-icons.mjs`. Add any newly configured icon there before regeneration; the generated browser bundle must remain below 20 KB.
+
+Performance acceptance budgets are:
+
+- No optimized image may exceed 120 KB, and the complete optimized image set must remain below 2 MB.
+- Mobile Lighthouse median across three runs: Performance 90+, FCP at or below 1.8 seconds, LCP at or below 2.5 seconds, TBT at or below 200 milliseconds, and CLS at or below 0.1.
+- Initial transfer: root at or below 1.5 MiB; `/b`, `/c`, and `/d` at or below 700 KiB, excluding telemetry payloads.
+
+Versioned files under `assets/optimized/`, `assets/fonts/`, and `assets/vendor/` receive a one-year immutable browser cache through `_headers`. HTML and `config.js` continue to revalidate so content and configuration deployments remain immediate.
 
 ## Configuration
 

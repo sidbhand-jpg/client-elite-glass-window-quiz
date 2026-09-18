@@ -3,11 +3,18 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "check": "node --check config.js && node --check functions/api/capi.js && node scripts/check-site.mjs",
+    "check": "node --check config.js && node --check functions/api/capi.js && node --check scripts/optimize-assets.mjs && node --check scripts/build-icons.mjs && node scripts/check-site.mjs",
+    "build:icons": "node scripts/build-icons.mjs",
+    "optimize:assets": "node scripts/optimize-assets.mjs && node scripts/build-icons.mjs",
     "dev": "wrangler pages dev . --port 4173",
     "deploy": "wrangler pages deploy . --project-name client-elite-glass-window-quiz --branch main"
   },
   "devDependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/oswald": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "lucide": "^0.468.0",
+    "sharp": "^0.34.4",
     "wrangler": "^4.38.0"
   }
 }

@@ -23,6 +23,33 @@ window.CONFIG = {
   headingFont: "Oswald",
   bodyFont: "Inter",
 
+  media: {
+    rootHero: {
+      image: "/assets/elite-glass-hero.png",
+      avif: "/assets/optimized/elite-glass-hero-v1-640.avif 640w, /assets/optimized/elite-glass-hero-v1-960.avif 960w, /assets/optimized/elite-glass-hero-v1-1440.avif 1440w",
+      webp: "/assets/optimized/elite-glass-hero-v1-640.webp 640w, /assets/optimized/elite-glass-hero-v1-960.webp 960w, /assets/optimized/elite-glass-hero-v1-1440.webp 1440w",
+      sizes: "100vw",
+      width: 1672,
+      height: 941
+    },
+    routeBHero: {
+      image: "/assets/shower-enclosure.png",
+      avif: "/assets/optimized/shower-enclosure-v1-640.avif 640w, /assets/optimized/shower-enclosure-v1-960.avif 960w, /assets/optimized/shower-enclosure-v1-1440.avif 1440w",
+      webp: "/assets/optimized/shower-enclosure-v1-640.webp 640w, /assets/optimized/shower-enclosure-v1-960.webp 960w, /assets/optimized/shower-enclosure-v1-1440.webp 1440w",
+      sizes: "100vw",
+      width: 1448,
+      height: 1086
+    },
+    routeCHero: {
+      image: "/assets/projects/window_redmond_main.jpg",
+      avif: "/assets/optimized/window-redmond-main-v1-640.avif 640w, /assets/optimized/window-redmond-main-v1-960.avif 960w, /assets/optimized/window-redmond-main-v1-1050.avif 1050w",
+      webp: "/assets/optimized/window-redmond-main-v1-640.webp 640w, /assets/optimized/window-redmond-main-v1-960.webp 960w, /assets/optimized/window-redmond-main-v1-1050.webp 1050w",
+      sizes: "100vw",
+      width: 1050,
+      height: 688
+    }
+  },
+
   lander: {
     badge: "Free Glass & Window Estimate — No Obligation",
     headline: "Plan Your Glass or Window Project in 60 Seconds",
@@ -43,12 +70,12 @@ window.CONFIG = {
     headline: "See Our Work Around Greater Seattle",
     subheadline: "Browse completed projects by the Elite Glass & Window team.",
     items: [
-      { title: "Frameless Shower Door", location: "Bellevue, WA", image: "/assets/projects/project_1.jpg", alt: "Elite Glass & Window frameless shower door installation in Bellevue" },
-      { title: "Front Door Replacement", location: "Bothell, WA", image: "/assets/projects/frontdoor_main.jpg", alt: "Elite Glass & Window front door replacement in Bothell" },
-      { title: "Glass Staircase Railing", location: "Medina, WA", image: "/assets/projects/stair_medina_main.jpg", alt: "Elite Glass & Window glass staircase railing replacement in Medina" },
-      { title: "Whole-Home Window Replacement", location: "Redmond, WA", image: "/assets/projects/window_redmond_main.jpg", alt: "Elite Glass & Window home window replacement in Redmond" },
-      { title: "Custom Wall Mirror", location: "Kirkland, WA", image: "/assets/projects/mirror_kirkland_main.jpg", alt: "Elite Glass & Window custom wall mirror installation in Kirkland" },
-      { title: "Sliding Patio Door", location: "Redmond, WA", image: "/assets/projects/patiodoor_redmond_main.jpg", alt: "Elite Glass & Window sliding patio door installation in Redmond" }
+      { title: "Frameless Shower Door", location: "Bellevue, WA", image: "/assets/projects/project_1.jpg", sources: { avif: "/assets/optimized/project-1-v1-480.avif 480w, /assets/optimized/project-1-v1-624.avif 624w", webp: "/assets/optimized/project-1-v1-480.webp 480w, /assets/optimized/project-1-v1-624.webp 624w", sizes: "(max-width: 700px) calc(100vw - 36px), 920px", width: 624, height: 454 }, alt: "Elite Glass & Window frameless shower door installation in Bellevue" },
+      { title: "Front Door Replacement", location: "Bothell, WA", image: "/assets/projects/frontdoor_main.jpg", sources: { avif: "/assets/optimized/frontdoor-main-v1-480.avif 480w, /assets/optimized/frontdoor-main-v1-960.avif 960w", webp: "/assets/optimized/frontdoor-main-v1-480.webp 480w, /assets/optimized/frontdoor-main-v1-960.webp 960w", sizes: "(max-width: 700px) calc(100vw - 36px), 920px", width: 1376, height: 1060 }, alt: "Elite Glass & Window front door replacement in Bothell" },
+      { title: "Glass Staircase Railing", location: "Medina, WA", image: "/assets/projects/stair_medina_main.jpg", sources: { avif: "/assets/optimized/stair-medina-main-v1-480.avif 480w, /assets/optimized/stair-medina-main-v1-960.avif 960w", webp: "/assets/optimized/stair-medina-main-v1-480.webp 480w, /assets/optimized/stair-medina-main-v1-960.webp 960w", sizes: "(max-width: 700px) calc(100vw - 36px), 920px", width: 1342, height: 932 }, alt: "Elite Glass & Window glass staircase railing replacement in Medina" },
+      { title: "Whole-Home Window Replacement", location: "Redmond, WA", image: "/assets/projects/window_redmond_main.jpg", sources: { avif: "/assets/optimized/window-redmond-main-v1-480.avif 480w, /assets/optimized/window-redmond-main-v1-960.avif 960w", webp: "/assets/optimized/window-redmond-main-v1-480.webp 480w, /assets/optimized/window-redmond-main-v1-960.webp 960w", sizes: "(max-width: 700px) calc(100vw - 36px), 920px", width: 1050, height: 688 }, alt: "Elite Glass & Window home window replacement in Redmond" },
+      { title: "Custom Wall Mirror", location: "Kirkland, WA", image: "/assets/projects/mirror_kirkland_main.jpg", sources: { avif: "/assets/optimized/mirror-kirkland-main-v1-480.avif 480w, /assets/optimized/mirror-kirkland-main-v1-960.avif 960w", webp: "/assets/optimized/mirror-kirkland-main-v1-480.webp 480w, /assets/optimized/mirror-kirkland-main-v1-960.webp 960w", sizes: "(max-width: 700px) calc(100vw - 36px), 920px", width: 1402, height: 950 }, alt: "Elite Glass & Window custom wall mirror installation in Kirkland" },
+      { title: "Sliding Patio Door", location: "Redmond, WA", image: "/assets/projects/patiodoor_redmond_main.jpg", sources: { avif: "/assets/optimized/patiodoor-redmond-main-v1-480.avif 480w, /assets/optimized/patiodoor-redmond-main-v1-960.avif 960w", webp: "/assets/optimized/patiodoor-redmond-main-v1-480.webp 480w, /assets/optimized/patiodoor-redmond-main-v1-960.webp 960w", sizes: "(max-width: 700px) calc(100vw - 36px), 920px", width: 1160, height: 708 }, alt: "Elite Glass & Window sliding patio door installation in Redmond" }
     ]
   },
 
@@ -90,10 +117,10 @@ window.CONFIG = {
       question: "What glass or window project do you need?",
       type: "image-grid",
       options: [
-        { label: "Window replacement", icon: "panels-top-left", image: "/assets/window-replacement.png" },
-        { label: "Shower enclosure", icon: "bath", image: "/assets/shower-enclosure.png" },
-        { label: "Custom glass or mirror", icon: "scan-line", image: "/assets/custom-glass-mirror.png" },
-        { label: "Glass railing or storefront", icon: "store", image: "/assets/glass-railing-storefront.png" }
+        { label: "Window replacement", icon: "panels-top-left", image: "/assets/window-replacement.png", sources: { avif: "/assets/optimized/window-replacement-v1-480.avif 480w, /assets/optimized/window-replacement-v1-960.avif 960w", webp: "/assets/optimized/window-replacement-v1-480.webp 480w, /assets/optimized/window-replacement-v1-960.webp 960w", sizes: "(max-width: 700px) calc((100vw - 49px) / 2), 250px", width: 1448, height: 1086 } },
+        { label: "Shower enclosure", icon: "bath", image: "/assets/shower-enclosure.png", sources: { avif: "/assets/optimized/shower-enclosure-v1-480.avif 480w, /assets/optimized/shower-enclosure-v1-960.avif 960w", webp: "/assets/optimized/shower-enclosure-v1-480.webp 480w, /assets/optimized/shower-enclosure-v1-960.webp 960w", sizes: "(max-width: 700px) calc((100vw - 49px) / 2), 250px", width: 1448, height: 1086 } },
+        { label: "Custom glass or mirror", icon: "scan-line", image: "/assets/custom-glass-mirror.png", sources: { avif: "/assets/optimized/custom-glass-mirror-v1-480.avif 480w, /assets/optimized/custom-glass-mirror-v1-960.avif 960w", webp: "/assets/optimized/custom-glass-mirror-v1-480.webp 480w, /assets/optimized/custom-glass-mirror-v1-960.webp 960w", sizes: "(max-width: 700px) calc((100vw - 49px) / 2), 250px", width: 1448, height: 1086 } },
+        { label: "Glass railing or storefront", icon: "store", image: "/assets/glass-railing-storefront.png", sources: { avif: "/assets/optimized/glass-railing-storefront-v1-480.avif 480w, /assets/optimized/glass-railing-storefront-v1-960.avif 960w", webp: "/assets/optimized/glass-railing-storefront-v1-480.webp 480w, /assets/optimized/glass-railing-storefront-v1-960.webp 960w", sizes: "(max-width: 700px) calc((100vw - 49px) / 2), 250px", width: 1448, height: 1086 } }
       ]
     },
     {

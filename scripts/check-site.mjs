@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import { Script } from "node:vm";
 
 const root = new URL("../", import.meta.url);
@@ -10,6 +10,7 @@ const redirects = await readFile(new URL("_redirects", root), "utf8");
 const rootRoute = await readFile(new URL("index.html", root), "utf8");
 const privacyPolicy = await readFile(new URL("privacy-policy/index.html", root), "utf8");
 const terms = await readFile(new URL("terms/index.html", root), "utf8");
+const headers = await readFile(new URL("_headers", root), "utf8");
 
 for (const [index, match] of [...routeB.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].entries()) {
   if (match[1].trim()) new Script(match[1], { filename: `route-b-inline-${index + 1}.js` });
@@ -18,6 +19,65 @@ for (const [index, match] of [...routeB.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)
 for (const [index, match] of [...routeC.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].entries()) {
   if (match[1].trim()) new Script(match[1], { filename: `route-c-inline-${index + 1}.js` });
 }
+
+for (const [label, page] of [["root", rootRoute], ["/b", routeB], ["/c and /d", routeC]]) {
+  for (const forbidden of ["fonts.googleapis.com", "fonts.gstatic.com", "unpkg.com/lucide"]) {
+    if (page.includes(forbidden)) throw new Error(`${label} still depends on ${forbidden}.`);
+  }
+  for (const required of ["/assets/fonts/fonts.css", "/assets/vendor/lucide-0.468.0.min.js", "fetchpriority=\"high\""]) {
+    if (!page.includes(required)) throw new Error(`${label} is missing optimized critical asset markup: ${required}`);
+  }
+}
+
+for (const required of [
+  "data-srcset=\"${item.sources.avif}\"",
+  "galleryObserver.observe(galleryCarousel)",
+  "loadGalleryItem(galleryIndex + 1)",
+  "decoding=\"async\"",
+]) {
+  if (!rootRoute.includes(required)) throw new Error(`Root route is missing lazy responsive image behavior: ${required}`);
+}
+
+for (const required of ["media: {", "rootHero: {", "routeBHero: {", "routeCHero: {", "sources: { avif:"]) {
+  if (!config.includes(required)) throw new Error(`Config is missing responsive image metadata: ${required}`);
+}
+
+for (const required of [
+  "/assets/optimized/*",
+  "/assets/fonts/*",
+  "/assets/vendor/*",
+  "Cache-Control: public, max-age=31536000, immutable",
+  "/config.js",
+  "Cache-Control: public, max-age=0, must-revalidate",
+]) {
+  if (!headers.includes(required)) throw new Error(`Missing Cloudflare cache rule: ${required}`);
+}
+
+const optimizedDirectory = new URL("assets/optimized/", root);
+const optimizedFiles = (await readdir(optimizedDirectory)).filter((name) => /\.(?:avif|webp)$/.test(name));
+if (optimizedFiles.length !== 54) throw new Error(`Expected 54 optimized image variants; found ${optimizedFiles.length}.`);
+let optimizedBytes = 0;
+for (const name of optimizedFiles) {
+  const file = await stat(new URL(name, optimizedDirectory));
+  optimizedBytes += file.size;
+  if (file.size > 120_000) throw new Error(`Optimized image exceeds the 120 KB budget: ${name}`);
+}
+if (optimizedBytes > 2_000_000) throw new Error(`Optimized image set exceeds the 2 MB budget: ${optimizedBytes} bytes.`);
+
+for (const asset of [
+  "assets/fonts/inter-latin-wght-normal-v1.woff2",
+  "assets/fonts/oswald-latin-wght-normal-v1.woff2",
+  "assets/fonts/barlow-condensed-latin-600-normal-v1.woff2",
+  "assets/fonts/barlow-condensed-latin-700-normal-v1.woff2",
+  "assets/fonts/barlow-condensed-latin-800-normal-v1.woff2",
+  "assets/vendor/lucide-0.468.0.min.js",
+]) {
+  const file = await stat(new URL(asset, root));
+  if (!file.size) throw new Error(`Required local asset is empty: ${asset}`);
+}
+
+const iconBundle = await stat(new URL("assets/vendor/lucide-0.468.0.min.js", root));
+if (iconBundle.size > 20_000) throw new Error(`Lucide subset exceeds the 20 KB budget: ${iconBundle.size} bytes.`);
 
 for (const needle of [
   "What describes you?",
