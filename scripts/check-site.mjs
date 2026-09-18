@@ -100,6 +100,7 @@ for (const needle of [
   "#step-1-shower-project",
   "#step-2-contact",
   "#thank-you",
+  "Step 1 of 2",
   "property_type: ''",
   "background: var(--secondary-dark); color: var(--white)",
   'class="rating-badge" aria-label="Five-star rated on Google"',
