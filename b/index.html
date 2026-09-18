@@ -225,7 +225,7 @@
       <p class="section-kicker">Free project estimate</p>
       <h2>Ready for your new shower glass?</h2>
       <p>Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
-      <a class="cta-button" id="estimate-cta" href="#step-1-property-type">Start my estimate</a>
+      <a class="cta-button" id="estimate-cta" href="#step-1-shower-project">Start my estimate</a>
     </section>
   </main>
 
@@ -378,8 +378,8 @@
 
     function setStep(step) {
       currentStep = step;
-      progress.style.width = `${Math.min(100, (step / 3) * 100)}%`;
-      stepLabel.textContent = step < 3 ? `Step ${step} of 3` : 'Final step';
+      progress.style.width = `${Math.min(100, (step / 2) * 100)}%`;
+      stepLabel.textContent = step < 2 ? `Step ${step} of 2` : 'Final step';
     }
 
     function renderQuestion(question, step, canGoBack, hash) {
@@ -400,28 +400,19 @@
         button.addEventListener('click', () => {
           answers[question.id] = button.dataset.value;
           button.classList.add('selected');
-          setTimeout(() => step === 1 ? renderProjectQuestion() : renderForm(), 160);
+          setTimeout(renderForm, 160);
         });
       });
-      content.querySelector('#back-button')?.addEventListener('click', renderAudienceQuestion);
-    }
-
-    function renderAudienceQuestion() {
-      delete answers.property_type;
-      delete answers.project_need;
-      renderQuestion(B.questions.audience, 1, false, '#step-1-property-type');
     }
 
     function renderProjectQuestion() {
-      const isHomeowner = answers.property_type === 'Homeowner';
-      const question = isHomeowner ? B.questions.homeowner : B.questions.business;
-      const hash = isHomeowner ? '#step-2-homeowner-project' : '#step-2-business-project';
-      renderQuestion(question, 2, true, hash);
+      delete answers.project_need;
+      renderQuestion(B.questions.project, 1, false, '#step-1-shower-project');
     }
 
     function renderForm() {
-      setStep(3);
-      trackQuizStep('#step-3-contact');
+      setStep(2);
+      trackQuizStep('#step-2-contact');
       const form = B.form || {};
       const consent = String(form.consentText || '').replace('{businessName}', C.businessName || 'Elite Glass & Window');
       content.innerHTML = `
@@ -504,7 +495,7 @@
         email: fields.email,
         phone: fields.phone,
         zip: fields.zip,
-        property_type: answers.property_type,
+        property_type: '',
         project_need: answers.project_need,
         sms_consent: true,
         marketing_consent: true,
@@ -548,7 +539,7 @@
     window.addEventListener('load', () => {
       if (window.lucide) lucide.createIcons();
       ensureClarity();
-      renderAudienceQuestion();
+      renderProjectQuestion();
       trackPageView();
       let trackingLoadTimer = window.setTimeout(() => {
         loadMetaPixel();
@@ -564,7 +555,7 @@
       });
       document.getElementById('estimate-cta').addEventListener('click', (event) => {
         event.preventDefault();
-        renderAudienceQuestion();
+        renderProjectQuestion();
         document.getElementById('quiz-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     }, { once: true });

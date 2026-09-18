@@ -80,15 +80,11 @@ const iconBundle = await stat(new URL("assets/vendor/lucide-0.468.0.min.js", roo
 if (iconBundle.size > 20_000) throw new Error(`Lucide subset exceeds the 20 KB budget: ${iconBundle.size} bytes.`);
 
 for (const needle of [
-  "What describes you?",
-  "Homeowner",
-  "Property manager",
-  "Contractor",
-  "Commercial",
-  "New shower glass",
-  "Shower glass replacement",
-  "Multiple units",
-  "Repair or replace",
+  "What kind of shower project do you want to get done?",
+  "New shower enclosure",
+  "Replace existing shower enclosure",
+  "Repair or adjust shower glass",
+  "Multiple showers or units",
   "consent_method: 'submit_implied'",
   "sms_consent: true",
   "fetch('/api/capi'",
@@ -101,11 +97,10 @@ for (const needle of [
   "loadClarity();",
   "clarity('set', 'funnelStep', label)",
   "clarity('event', eventName)",
-  "#step-1-property-type",
-  "#step-2-homeowner-project",
-  "#step-2-business-project",
-  "#step-3-contact",
+  "#step-1-shower-project",
+  "#step-2-contact",
   "#thank-you",
+  "property_type: ''",
   "background: var(--secondary-dark); color: var(--white)",
   'class="rating-badge" aria-label="Five-star rated on Google"',
   'class="rating-badge-label">Rated on Google',
@@ -113,9 +108,13 @@ for (const needle of [
   if (!routeB.includes(needle) && !config.includes(needle)) throw new Error(`Missing route /b behavior: ${needle}`);
 }
 
+if (!capi.includes("input.property_type || input.project_need")) {
+  throw new Error("Meta CAPI content category must fall back to project_need.");
+}
+
 if (!config.includes('metaPixelId: "1072168465554731"')) throw new Error("Meta Pixel ID is not configured.");
-if ((config.match(/\{ label: "Contractor", icon: "hard-hat" \}/g) || []).length !== 2) {
-  throw new Error("Contractor must be configured once in each of routes /b and /c.");
+if ((config.match(/\{ label: "Contractor", icon: "hard-hat" \}/g) || []).length !== 1) {
+  throw new Error("Contractor must remain configured once in route /c only.");
 }
 if (!redirects.includes("/b  /b/  301") || redirects.includes("/b/ /index.html")) throw new Error("Route /b redirect is not isolated.");
 

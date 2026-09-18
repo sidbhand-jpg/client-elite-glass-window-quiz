@@ -131,7 +131,7 @@ export async function onRequestPost({ request, env }) {
           : "Elite Glass & Window estimate quiz";
     event.custom_data = {
       content_name: contentName,
-      content_category: String(input.property_type || "").slice(0, 100),
+      content_category: String(input.property_type || input.project_need || "").slice(0, 100),
     };
   }
 

@@ -183,31 +183,14 @@ window.CONFIG = {
       "Residential and commercial"
     ],
     questions: {
-      audience: {
-        id: "property_type",
-        label: "What describes you?",
-        options: [
-          { label: "Homeowner", icon: "home" },
-          { label: "Property manager", icon: "building-2" },
-          { label: "Contractor", icon: "hard-hat" },
-          { label: "Commercial", icon: "briefcase-business" }
-        ]
-      },
-      homeowner: {
+      project: {
         id: "project_need",
-        label: "What shower glass project do you need?",
+        label: "What kind of shower project do you want to get done?",
         options: [
-          { label: "New shower glass", icon: "sparkles" },
-          { label: "Shower glass replacement", icon: "refresh-cw" }
-        ]
-      },
-      business: {
-        id: "project_need",
-        label: "What can we help with?",
-        options: [
-          { label: "New install", icon: "square-plus" },
-          { label: "Multiple units", icon: "layers-3" },
-          { label: "Repair or replace", icon: "wrench" }
+          { label: "New shower enclosure", icon: "sparkles" },
+          { label: "Replace existing shower enclosure", icon: "refresh-cw" },
+          { label: "Repair or adjust shower glass", icon: "wrench" },
+          { label: "Multiple showers or units", icon: "layers-3" }
         ]
       }
     },

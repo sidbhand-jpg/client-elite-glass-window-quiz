@@ -28,7 +28,7 @@ The Meta access token must never be placed in `config.js`, browser code, Git, lo
 
 ```text
 ├── index.html                  # Existing root and /a funnel UI
-├── b/index.html                # Dedicated conditional shower-glass funnel
+├── b/index.html                # Dedicated two-step shower-glass funnel
 ├── c/index.html                # Shared conditional window funnel for /c and /d
 ├── config.js                  # Elite Glass & Window content and integrations
 ├── functions/api/capi.js       # Server-side Meta PageView and Lead delivery
@@ -56,7 +56,7 @@ The landing page introduces Elite Glass & Window, displays project imagery, Goog
 4. Desired timeline
 5. Investment range
 
-Route `/b` starts with Homeowner, Property manager, Contractor, and Commercial. Homeowners then choose New shower glass or Shower glass replacement; property managers, contractors, and commercial visitors choose New install, Multiple units, or Repair or replace. The final form collects name, email, phone number, and ZIP code.
+Route `/b` asks one required shower-project question: New shower enclosure, Replace existing shower enclosure, Repair or adjust shower glass, or Multiple showers or units. The second and final screen collects name, email, phone number, and ZIP code.
 
 Route `/c` follows the same conditional flow for windows. Homeowners choose New window installation or Window replacement; property managers, contractors, and commercial visitors choose New window installation, Multiple windows or units, or Repair or replace. It uses the completed Redmond window project as its hero image.
 
@@ -73,7 +73,7 @@ The project includes four routes for testing different landing experiences:
 | Route | Variant | Experience |
 |---|---|---|
 | `/a` | A | Direct landing experience without the gallery and review proof sections |
-| `/b` | B | Dedicated mobile-first shower-glass funnel with conditional audience routing |
+| `/b` | B | Dedicated mobile-first two-step shower-glass funnel |
 | `/c` | C | Dedicated mobile-first window funnel with conditional audience routing |
 | `/d` | D | Route C window flow with a source-backed `$300 per window*` material-only offer |
 | `/` | Legacy B | Existing five-question landing experience with gallery and review proof |
@@ -102,7 +102,7 @@ Then open:
 
 - <http://127.0.0.1:4173/> for the existing root funnel
 - <http://127.0.0.1:4173/a> for variant A
-- <http://127.0.0.1:4173/b/> for the conditional shower-glass funnel
+- <http://127.0.0.1:4173/b/> for the two-step shower-glass funnel
 - <http://127.0.0.1:4173/c/> for the conditional window funnel
 - <http://127.0.0.1:4173/d/> for the window offer funnel
 
@@ -205,14 +205,12 @@ The page uses the following funnel hashes:
 
 These labels can be used in Clarity to analyze step-level funnel activity and drop-off.
 
-Routes `/b`, `/c`, and `/d` use the same three-step conditional hash sequence, with route-specific Clarity event prefixes:
+Route `/b` uses a two-step sequence. Routes `/c` and `/d` retain their three-step conditional sequence.
 
 | Route `/b` screen | Hash | Clarity event |
 |---|---|---|
-| Property type | `#step-1-property-type` | `quiz_b_step_1_property_type` |
-| Homeowner project | `#step-2-homeowner-project` | `quiz_b_step_2_homeowner_project` |
-| Property manager/commercial project | `#step-2-business-project` | `quiz_b_step_2_business_project` |
-| Contact form | `#step-3-contact` | `quiz_b_step_3_contact` |
+| Shower project | `#step-1-shower-project` | `quiz_b_step_1_shower_project` |
+| Contact form | `#step-2-contact` | `quiz_b_step_2_contact` |
 | Thank-you screen | `#thank-you` | `quiz_b_thank_you` |
 
 Each render updates `funnelStep`; its one-time custom event records that the visitor reached the screen. Route assignment is recorded as `quiz_path_b`, `quiz_path_c`, or `quiz_path_d`.
@@ -276,16 +274,12 @@ The browser sends a JSON `POST` request with `Content-Type: application/json`. A
     "zip": "98052"
   },
   "quiz_answers": {
-    "project_type": "Window replacement",
-    "property_type": "Single-family home",
-    "top_priority": "Energy efficiency",
-    "timeline": "Within 1 month",
-    "budget": "$7,500 – $15,000"
+    "project_need": "New shower enclosure"
   },
   "attribution": {
     "utm_source": "facebook",
     "utm_medium": "paid",
-    "utm_campaign": "window-replacement",
+    "utm_campaign": "shower-glass",
     "utm_content": "",
     "utm_term": "",
     "ad_id": "123456",
