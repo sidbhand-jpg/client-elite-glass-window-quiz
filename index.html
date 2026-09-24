@@ -1218,7 +1218,8 @@
     // ── 2b. Meta Pixel ───────────────────────────────────────
     if (C.metaPixelId && C.metaPixelId !== 'YOUR_META_PIXEL_ID') {
       trackingSources.meta = 'https://connect.facebook.net/en_US/fbevents.js';
-      fbq('init', C.metaPixelId);
+      const visitorId = meta.context().visitor_id;
+      fbq('init', C.metaPixelId, visitorId ? { external_id: visitorId } : {});
       if (window._metaTag && !window._metaTag.src) window._metaTag.src = trackingSources.meta;
       meta.pageView();
       const ns = document.createElement('noscript');

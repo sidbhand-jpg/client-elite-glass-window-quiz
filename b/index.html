@@ -263,7 +263,8 @@
       }
       if (!window._eliteMetaInitialized) {
         fbq('set', 'autoConfig', false, C.metaPixelId);
-        fbq('init', C.metaPixelId);
+        const visitorId = meta.context().visitor_id;
+        fbq('init', C.metaPixelId, visitorId ? { external_id: visitorId } : {});
         window._eliteMetaInitialized = true;
       }
       return true;
