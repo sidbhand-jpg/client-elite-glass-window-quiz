@@ -11,7 +11,8 @@
   <link rel="preload" href="/assets/fonts/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="/assets/fonts/fonts.css"></noscript>
   <script defer src="/config.js"></script>
-  <script defer src="/assets/vendor/lucide-0.468.0.min.js"></script>
+  <script defer src="/assets/vendor/lucide-0.468.0.min.js?v=2"></script>
+  <script>document.documentElement.classList.toggle('route-c', !/^\/d(?:\/|$)/.test(location.pathname));</script>
   <style>
     :root {
       --navy: #102b52;
@@ -61,6 +62,7 @@
     .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(8, 18, 39, .82) 0%, rgba(8, 18, 39, .57) 48%, rgba(8, 18, 39, .8) 100%); pointer-events: none; }
     .hero-media { position: absolute; inset: 0; z-index: -2; display: block; width: 100%; height: 100%; }
     .hero-media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .hero-inner { width: min(1120px, 100%); margin: 0 auto; }
     .hero-copy { width: min(680px, 100%); color: #fff; }
     .eyebrow, .section-kicker {
@@ -153,6 +155,14 @@
     .trust-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 24px max(18px, calc((100vw - 1120px)/2)); background: var(--secondary-dark); color: var(--white); }
     .trust-item { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-align: center; }
     .trust-item svg { width: 19px; height: 19px; color: var(--blue-light); }
+    .route-c .route-d-only, html:not(.route-c) .route-c-only { display: none; }
+    .route-c body { min-height: 100vh; display: flex; flex-direction: column; }
+    .route-c main { flex: 1; display: flex; flex-direction: column; }
+    .route-c .trust-bar { grid-template-columns: repeat(3, 1fr); padding-block: 16px; }
+    .route-c .hero { flex: 1; min-height: 0; padding: 38px 18px 70px; }
+    .route-c .hero-inner { width: min(680px, 100%); }
+    .route-c .hero-copy, .route-c .estimate-section { display: none; }
+    .route-c .quiz-card { margin: 0; }
     .estimate-section { padding: 70px 20px 76px; text-align: center; }
     .section-kicker { color: var(--navy); }
     .estimate-section h2 { margin: 10px auto 14px; max-width: 560px; color: var(--navy); font: 800 clamp(38px, 7vw, 58px)/.94 Barlow Condensed, sans-serif; text-transform: uppercase; }
@@ -168,6 +178,8 @@
       .hero-inner { display: grid; grid-template-columns: minmax(0, .92fr) minmax(480px, 1.08fr); gap: 48px; align-items: center; }
       .quiz-card { margin-top: 0; }
       .hero-copy { align-self: start; padding-top: 38px; }
+      .route-c .hero { padding-top: 60px; }
+      .route-c .hero-inner { display: block; }
     }
     @media (max-width: 700px) {
       .site-header { height: 62px; padding-inline: 16px; }
@@ -186,6 +198,9 @@
       .field.full { grid-column: auto; }
       .trust-bar { grid-template-columns: 1fr 1fr; gap: 18px 10px; padding-block: 22px; }
       .trust-item { font-size: 11px; }
+      .route-c .trust-bar { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px 8px; }
+      .route-c .trust-item { flex-direction: column; gap: 4px; font-size: 10px; }
+      .route-c .trust-item svg { width: 17px; height: 17px; }
     }
     @media (max-width: 410px) {
       .brand-logo { width: 180px; }
@@ -204,6 +219,12 @@
   </header>
 
   <main>
+    <section class="trust-bar route-c-only" aria-label="Elite Glass and Window service benefits">
+      <div class="trust-item"><i data-lucide="home"></i><span>Local Glass Specialist</span></div>
+      <div class="trust-item"><i data-lucide="map-pin"></i><span>Greater Seattle</span></div>
+      <div class="trust-item"><i data-lucide="heart-handshake"></i><span>Family Owned</span></div>
+    </section>
+
     <section class="hero">
       <picture class="hero-media" aria-hidden="true">
         <source type="image/avif" srcset="/assets/optimized/window-redmond-main-v1-640.avif 640w, /assets/optimized/window-redmond-main-v1-960.avif 960w, /assets/optimized/window-redmond-main-v1-1050.avif 1050w" sizes="100vw">
@@ -211,6 +232,7 @@
         <img src="/assets/projects/window_redmond_main.jpg" alt="" width="1050" height="688" loading="eager" fetchpriority="high" decoding="async">
       </picture>
       <div class="hero-inner">
+        <h1 class="sr-only route-c-only">Window estimate</h1>
         <div class="hero-copy">
           <p class="eyebrow" id="hero-eyebrow">Greater Seattle</p>
           <h1 id="hero-headline">Window Replacement & Installation</h1>
@@ -226,7 +248,7 @@
       </div>
     </section>
 
-    <section class="trust-bar" aria-label="Elite Glass and Window service benefits">
+    <section class="trust-bar route-d-only" aria-label="Elite Glass and Window service benefits">
       <div class="trust-item"><i data-lucide="home"></i><span>Local Window Specialists</span></div>
       <div class="trust-item"><i data-lucide="calendar-days"></i><span>Serving Since 2018</span></div>
       <div class="trust-item"><i data-lucide="badge-check"></i><span>Free Project Estimate</span></div>
@@ -237,7 +259,7 @@
       <p class="offer-disclaimer" id="offer-disclaimer"></p>
     </section>
 
-    <section class="estimate-section">
+    <section class="estimate-section route-d-only">
       <p class="section-kicker">Free project estimate</p>
       <h2 id="bottom-headline">Ready for new or replacement windows?</h2>
       <p id="bottom-copy">Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
@@ -283,24 +305,31 @@
     if (V.pageTitle) document.title = V.pageTitle;
     if (V.metaDescription) document.querySelector('meta[name="description"]')?.setAttribute('content', V.metaDescription);
 
-    document.getElementById('hero-eyebrow').textContent = V.eyebrow || 'Greater Seattle';
-    const heroHeadline = document.getElementById('hero-headline');
-    heroHeadline.textContent = V.headline || 'Window Replacement & Installation';
-    if (V.offer?.display) {
-      const asterisk = document.createElement('sup');
-      asterisk.className = 'offer-asterisk';
-      asterisk.textContent = '*';
-      heroHeadline.append(asterisk);
+    if (isOfferRoute) {
+      document.getElementById('hero-eyebrow').textContent = V.eyebrow || 'Greater Seattle';
+      const heroHeadline = document.getElementById('hero-headline');
+      heroHeadline.textContent = V.headline || 'Window Replacement & Installation';
+      if (V.offer?.display) {
+        const asterisk = document.createElement('sup');
+        asterisk.className = 'offer-asterisk';
+        asterisk.textContent = '*';
+        heroHeadline.append(asterisk);
+      }
+      document.getElementById('hero-subheadline').textContent = V.subheadline || '';
+      document.getElementById('trust-points').innerHTML = (V.trustPoints || []).map((point) => `<li>${escapeHtml(point)}</li>`).join('');
+      const offerDisclaimer = document.getElementById('offer-disclaimer');
+      if (V.offer?.disclaimer) {
+        offerDisclaimer.textContent = V.offer.disclaimer;
+        document.getElementById('offer-disclaimer-section').hidden = false;
+      }
+      document.getElementById('bottom-headline').textContent = V.bottomHeadline || 'Ready for new or replacement windows?';
+      document.getElementById('bottom-copy').textContent = V.bottomCopy || 'Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.';
+    } else {
+      document.querySelector('.hero-copy').remove();
+      document.querySelector('.route-d-only.trust-bar').remove();
+      document.getElementById('offer-disclaimer-section').remove();
+      document.querySelector('.estimate-section').remove();
     }
-    document.getElementById('hero-subheadline').textContent = V.subheadline || '';
-    document.getElementById('trust-points').innerHTML = (V.trustPoints || []).map((point) => `<li>${escapeHtml(point)}</li>`).join('');
-    const offerDisclaimer = document.getElementById('offer-disclaimer');
-    if (V.offer?.disclaimer) {
-      offerDisclaimer.textContent = V.offer.disclaimer;
-      document.getElementById('offer-disclaimer-section').hidden = false;
-    }
-    document.getElementById('bottom-headline').textContent = V.bottomHeadline || 'Ready for new or replacement windows?';
-    document.getElementById('bottom-copy').textContent = V.bottomCopy || 'Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.';
     document.getElementById('footer-links').innerHTML = footerLinks.map((link) => `<a href="${escapeAttr(link.href)}">${escapeHtml(link.label)}</a>`).join(' · ');
 
     function escapeHtml(value) {
@@ -606,11 +635,13 @@
       ['pointerdown', 'keydown', 'touchstart'].forEach((eventName) => {
         window.addEventListener(eventName, loadTrackingOnIntent, { once: true, passive: true });
       });
-      document.getElementById('estimate-cta').addEventListener('click', (event) => {
-        event.preventDefault();
-        renderAudienceQuestion();
-        document.getElementById('quiz-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
+      if (isOfferRoute) {
+        document.getElementById('estimate-cta').addEventListener('click', (event) => {
+          event.preventDefault();
+          renderAudienceQuestion();
+          document.getElementById('quiz-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
     }, { once: true });
   }, { once: true });
   </script>

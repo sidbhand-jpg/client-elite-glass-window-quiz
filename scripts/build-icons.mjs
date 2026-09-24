@@ -8,7 +8,7 @@ const output = path.join(root, "assets", "vendor", "lucide-0.468.0.min.js");
 const names = [
   "badge-check", "badge-dollar-sign", "banknote", "bath", "briefcase-business",
   "building-2", "calendar-clock", "calendar-days", "check", "chevron-left",
-  "chevron-right", "circle", "circle-dollar-sign", "hammer", "hard-hat", "home",
+  "chevron-right", "circle", "circle-dollar-sign", "hammer", "hard-hat", "heart-handshake", "home",
   "house", "image", "layers-3", "leaf", "map-pin", "panels-top-left", "refresh-cw",
   "scan-line", "search", "shield-check", "sparkles", "square-plus", "store", "wallet",
   "wrench", "zap",
