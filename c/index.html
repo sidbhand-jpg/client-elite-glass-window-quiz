@@ -179,6 +179,20 @@
     .route-c .hero-inner { width: min(680px, 100%); }
     .route-c .hero-copy, .route-c .estimate-section { display: none; }
     .route-c .quiz-card { margin: 0; }
+    .route-c .option {
+      min-height: 112px;
+      padding: 18px;
+      border: 2px solid #c4dcea;
+      font-size: 16px;
+      line-height: 1.25;
+      box-shadow: 0 4px 12px rgba(13, 37, 67, .08);
+      transition: border-color .18s ease, transform .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .route-c .option:hover { border-color: var(--blue); background: #f2fbff; transform: translateY(-2px); box-shadow: 0 7px 16px rgba(13, 37, 67, .14); }
+    .route-c .option:focus-visible { border-color: var(--blue); background: #f2fbff; outline: 3px solid #1479b4; outline-offset: 2px; }
+    .route-c .option:active { transform: scale(.98); }
+    .route-c .option svg { width: 28px; height: 28px; flex: none; }
+    .route-c .submit-button { min-height: 60px; }
     html:not(.route-c) .quiz-card { min-height: 360px; }
     .estimate-section { padding: 70px 20px 76px; text-align: center; }
     .section-kicker { color: var(--navy); }
@@ -213,6 +227,7 @@
       html:not(.route-c) .quiz-card { min-height: 0; }
       .options-grid { grid-template-columns: 1fr 1fr; }
       .option { min-height: 86px; padding: 12px 9px; flex-direction: column; gap: 7px; font-size: 13px; text-align: center; }
+      .route-c .option { min-height: 108px; padding: 14px 10px; gap: 9px; font-size: 15px; }
       .contact-grid { grid-template-columns: 1fr; }
       .field.full { grid-column: auto; }
       .trust-bar { grid-template-columns: 1fr 1fr; gap: 18px 10px; padding-block: 22px; }
