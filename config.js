@@ -195,11 +195,10 @@ window.CONFIG = {
       }
     },
     form: {
-      eyebrow: "Free in-home estimate",
       headline: "Tell us where to reach you",
       subtext: "Elite Glass & Window will follow up about your shower glass project.",
       ctaLabel: "Request my free estimate",
-      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help."
+      consentText: "By submitting, you agree to receive marketing texts and emails from {businessName}."
     }
   },
 
@@ -242,11 +241,10 @@ window.CONFIG = {
       }
     },
     form: {
-      eyebrow: "Free in-home estimate",
       headline: "Tell us where to reach you",
       subtext: "Elite Glass & Window will follow up about your window project.",
       ctaLabel: "Request my free estimate",
-      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help."
+      consentText: "By submitting, you agree to receive marketing texts and emails from {businessName}."
     }
   },
 
@@ -266,7 +264,8 @@ window.CONFIG = {
     form: {
       eyebrow: "Free window estimate",
       headline: "See Which Options Fit Your Project",
-      subtext: "Elite Glass & Window will confirm product eligibility, measurements, and complete installed pricing."
+      subtext: "Elite Glass & Window will confirm product eligibility, measurements, and complete installed pricing.",
+      consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help."
     }
   },
 

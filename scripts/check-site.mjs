@@ -24,9 +24,25 @@ for (const [label, page] of [["root", rootRoute], ["/b", routeB], ["/c and /d", 
   for (const forbidden of ["fonts.googleapis.com", "fonts.gstatic.com", "unpkg.com/lucide"]) {
     if (page.includes(forbidden)) throw new Error(`${label} still depends on ${forbidden}.`);
   }
-  for (const required of ["/assets/fonts/fonts.css", "/assets/vendor/lucide-0.468.0.min.js", "fetchpriority=\"high\""]) {
+  for (const required of ["/assets/fonts/fonts.css", "/assets/vendor/lucide-0.468.0.min.js"]) {
     if (!page.includes(required)) throw new Error(`${label} is missing optimized critical asset markup: ${required}`);
   }
+}
+
+for (const [label, page] of [["/b", routeB], ["/c and /d", routeC]]) {
+  if (!page.includes('barlow-condensed-latin-700-normal-v1.woff2" as="font"')) {
+    throw new Error(`${label} must prioritize the first-question heading font.`);
+  }
+}
+
+if (routeB.includes('class="hero-media"') || /<link rel="preload" as="image"/.test(routeB)) {
+  throw new Error("Route /b still loads a hero background image.");
+}
+if (!routeC.includes('if (isWindowOffer)') || !routeC.includes('data-src="/assets/projects/window_redmond_main.jpg"') || /<link rel="preload" as="image"/.test(routeC)) {
+  throw new Error("Only route /d may preload and display the shared window hero image.");
+}
+if (!rootRoute.includes('class="route-hero-media"') || !rootRoute.includes('as="image"')) {
+  throw new Error("The main quiz hero image must remain in place.");
 }
 
 for (const required of [
@@ -185,8 +201,12 @@ for (const needle of [
   if (!config.includes(needle)) throw new Error(`Missing same-site legal link: ${needle}`);
 }
 
-if ((config.match(/Message frequency varies\./g) || []).length !== 3) {
-  throw new Error("Every quiz consent disclosure must state that message frequency varies.");
+if ((config.match(/By submitting, you agree to receive marketing texts and emails from \{businessName\}\./g) || []).length !== 2) {
+  throw new Error("Routes B and C must use the approved marketing text and email disclosure.");
+}
+
+if ((config.match(/Message frequency varies\./g) || []).length !== 2) {
+  throw new Error("Route D and the shared consent disclosure must retain their existing message frequency terms.");
 }
 
 for (const [label, page, needles] of [
