@@ -61,7 +61,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const eventName = String(input.event_name || "").trim();
-  if (!new Set(["PageView", "Lead"]).has(eventName)) {
+  if (!new Set(["PageView", "FunnelStep", "ButtonClick", "Lead"]).has(eventName)) {
     return json({ ok: false, error: "Unsupported event" }, 400);
   }
 
@@ -87,6 +87,8 @@ export async function onRequestPost({ request, env }) {
   const nameParts = normalize(input.name).split(/\s+/).filter(Boolean);
   const firstName = nameParts.shift() || "";
   const lastName = nameParts.join(" ");
+  const visitorId = /^egw_[0-9a-f-]{36}$/.test(String(input.visitor_id || ""))
+    ? String(input.visitor_id) : "";
   const userData = {
     em: await hashedValues([email]),
     ph: await hashedValues([phone]),
@@ -94,6 +96,8 @@ export async function onRequestPost({ request, env }) {
     ln: await hashedValues([lastName]),
     zp: await hashedValues([String(input.zip || "").slice(0, 5)]),
     country: await hashedValues(["us"]),
+    ...((visitorId || eventName === "Lead")
+      ? { external_id: await hashedValues([visitorId || eventId]) } : {}),
     client_ip_address: request.headers.get("CF-Connecting-IP") || undefined,
     client_user_agent: String(input.user_agent || request.headers.get("user-agent") || "").slice(0, 500),
     fbp: String(input.fbp || "").slice(0, 255) || undefined,
@@ -120,19 +124,32 @@ export async function onRequestPost({ request, env }) {
     event_source_url: sourceUrl,
     user_data: userData,
   };
+  const sourcePath = new URL(sourceUrl).pathname;
+  const contentName = sourcePath.startsWith("/d")
+    ? "Route D $300 window offer"
+    : sourcePath.startsWith("/c")
+      ? "Route C window estimate"
+      : sourcePath.startsWith("/b")
+        ? "Route B shower glass estimate"
+        : "Elite Glass & Window estimate quiz";
+  event.custom_data = {
+    content_name: contentName,
+    route: ["/a", "/b", "/c", "/d"].find((route) => sourcePath === route || sourcePath.startsWith(`${route}/`)) || "/",
+    variant: String(input.variant || "").slice(0, 10),
+  };
   if (eventName === "Lead") {
-    const sourcePath = new URL(sourceUrl).pathname;
-    const contentName = sourcePath.startsWith("/d")
-      ? "Route D $300 window offer"
-      : sourcePath.startsWith("/c")
-        ? "Route C window estimate"
-        : sourcePath.startsWith("/b")
-          ? "Route B shower glass estimate"
-          : "Elite Glass & Window estimate quiz";
-    event.custom_data = {
-      content_name: contentName,
-      content_category: String(input.property_type || input.project_need || "").slice(0, 100),
-    };
+    event.custom_data.content_category = String(input.property_type || input.project_need || "").slice(0, 100);
+  }
+  if (eventName === "FunnelStep") {
+    event.custom_data.step = String(input.step || "").slice(0, 100);
+    event.custom_data.content_category = String(input.content_category || "").slice(0, 100);
+    for (const key of ["answer_choice", "property_type", "project_need"]) {
+      if (input[key]) event.custom_data[key] = String(input[key]).slice(0, 100);
+    }
+  }
+  if (eventName === "ButtonClick") {
+    event.custom_data.button_name = String(input.button_name || "").slice(0, 100);
+    event.custom_data.step = String(input.step || "").slice(0, 100);
   }
 
   const payload = { data: [event] };

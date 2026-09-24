@@ -2,12 +2,15 @@
   "name": "client-elite-glass-window-quiz",
   "version": "1.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "check": "node --check config.js && node --check functions/api/capi.js && node --check scripts/optimize-assets.mjs && node --check scripts/build-icons.mjs && node scripts/check-site.mjs",
+    "test": "node --test test/*.test.mjs",
     "build:icons": "node scripts/build-icons.mjs",
     "optimize:assets": "node scripts/optimize-assets.mjs && node scripts/build-icons.mjs",
-    "dev": "wrangler pages dev . --port 4173",
-    "deploy": "wrangler pages deploy . --project-name client-elite-glass-window-quiz --branch main"
+    "dev": "npm run build:pages && wrangler pages dev dist --port 4173",
+    "build:pages": "node scripts/build-pages.mjs",
+    "deploy": "npm run build:pages && wrangler pages deploy dist --project-name client-elite-glass-window-quiz --branch main"
   },
   "devDependencies": {
     "@fontsource-variable/inter": "^5.3.0",

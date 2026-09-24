@@ -2,7 +2,7 @@
 
 A standalone, config-driven lead-generation quiz for Elite Glass & Window. It helps residential and commercial prospects identify their project needs and request a free estimate.
 
-The deployed funnel is a static site. Business details, brand styling, proof content, questions, tracking IDs, and lead-delivery settings are stored in `config.js`. A local asset-generation command creates the committed responsive image variants used by the pages.
+The deployed funnel uses static pages and two Cloudflare Pages Functions. Business details, brand styling, proof content, questions, and public tracking IDs are stored in `config.js`. Server secrets and the Make destination stay in the Pages secret store.
 
 ## Live Project
 
@@ -17,17 +17,18 @@ Pushing to `main` automatically creates a new Cloudflare Pages deployment.
 | Integration | Status | Configuration |
 |---|---|---|
 | Microsoft Clarity | Active | Project ID `yadrhyi60g` |
-| Meta Pixel | Active | Dataset `1072168465554731`; PageView and Lead use browser/server deduplication IDs |
-| Meta Conversions API | Active on Cloudflare Pages | `/api/capi` hashes contact identifiers server-side; the access token is a Worker secret |
-| Lead webhook | Active | Existing Elite Glass Make webhook |
+| Meta Pixel | Active | Dataset `1072168465554731`; quiz events pair browser and server with a shared event ID |
+| Meta Conversions API | Active | `/api/capi` hashes available identifiers server-side; the access token is a Pages secret |
+| Lead relay | Active | `/api/lead` sends JSON to Make and requires the client-app receiver acknowledgment |
 | Immediate AI call | Disabled | Quiz submissions use the Make webhook and do not initiate phone routing |
 
-The Meta access token must never be placed in `config.js`, browser code, Git, logs, or `.env.example`.
+Never place Meta, Clarity, Make, or test authentication secrets in browser code, Git, or the Pages static output. `npm run deploy` builds an allowlisted `dist/` directory to exclude `.env` and private tooling.
 
 ## Project Structure
 
 ```text
 ├── index.html                  # Existing root and /a funnel UI
+├── a/index.html                # Route A mirror of the root quiz, preserving /a/ on Pages
 ├── b/index.html                # Dedicated two-step shower-glass funnel
 ├── c/index.html                # Shared conditional window funnel for /c and /d
 ├── config.js                  # Elite Glass & Window content and integrations
@@ -217,12 +218,14 @@ Each render updates `funnelStep`; its one-time custom event records that the vis
 
 ### Meta Pixel
 
-Meta Pixel dataset `1072168465554731` is configured. Routes `/b`, `/c`, and `/d` fire:
+Meta Pixel dataset `1072168465554731` is configured on `/`, `/a`, `/b`, `/c`, and `/d`:
 
 | Event | When | Details |
 |---|---|---|
 | `PageView` | Initial page load | Browser Pixel plus server CAPI using the same `event_id` |
-| `Lead` | Valid form submission | Browser Pixel plus server CAPI using the same `event_id` |
+| `FunnelStep` | Question or contact step reached | Route, variant, step, and available answer context |
+| `ButtonClick` | Estimate start, contact stage, or submit intent | Route, button ID, step, and source URL |
+| `Lead` | Receiver acknowledges a new or duplicate submission | Hashed contact fields; browser Pixel plus server CAPI using the same `event_id` |
 
 The public dataset identifier lives in `config.js`:
 
@@ -230,7 +233,9 @@ The public dataset identifier lives in `config.js`:
 metaPixelId: "1072168465554731"
 ```
 
-`functions/api/capi.js` accepts only same-origin `PageView` and `Lead` events, hashes contact identifiers, and reads `META_CAPI_ACCESS_TOKEN` from the Cloudflare Pages secret store. Protected test delivery additionally requires `META_TEST_EVENT_CODE` and `META_TEST_AUTH`.
+`functions/api/capi.js` accepts only same-origin quiz events and hashes available contact fields. It forwards actual `_fbp`/`_fbc`, a stable first-party visitor ID, and the visitor IP and user agent. Missing Meta identifiers are omitted. The Client App sends `Schedule` after a confirmed Cal.com booking and `Purchase` after a newly won job with positive value. Those events reuse the original lead attribution and contact fields. An outbox keeps their event IDs stable across retries.
+
+Cloudflare Pages secrets: `META_CAPI_ACCESS_TOKEN`, `MAKE_QUIZ_WEBHOOK_URL`, `ELITE_TEST_SIGNING_KEY`, `META_TEST_AUTH`, and optional `META_TEST_EVENT_CODE`. The Client App Worker also needs `META_CAPI_ACCESS_TOKEN`, `ELITE_TEST_SIGNING_KEY`, `META_TEST_AUTH`, and optional `META_TEST_EVENT_CODE`. Use the same signing key and test auth on both services. Never publish their values.
 
 ### Captured Attribution
 
@@ -246,57 +251,18 @@ On page load, the funnel captures attribution in `sessionStorage`:
 - `campaign_id`
 - `fbclid`
 - `_fbp` and `_fbc`
+- Stable first-party `visitor_id`
 - Source URL
 - User agent
 - Unique `lead_event_id`
 
 Basic first-touch source, campaign, ad ID, and timestamp values are also saved in `localStorage` once per browser.
 
-## Lead Webhook
+## Lead Relay and Safe Tests
 
-Set `webhookUrl` to a Make, GoHighLevel, Zapier, or compatible HTTPS endpoint:
+The browser posts the completed quiz to the same-origin `/api/lead` relay. The relay attaches the original visitor IP and user agent, sends JSON to the Make webhook, and requires the Client App receiver's structured `accepted` receipt. Only then does the UI show success and emit `Lead`. Make's `notify_eligible = yes` filter allows Gmail, Sheets, and Slack only for a newly accepted production lead.
 
-```js
-webhookUrl: "https://your-webhook-endpoint.example"
-```
-
-The browser sends a JSON `POST` request with `Content-Type: application/json`. A representative payload is:
-
-```json
-{
-  "business": "Elite Glass & Window",
-  "funnel_variant": "B",
-  "submitted_at": "2026-08-30T12:00:00.000Z",
-  "contact": {
-    "name": "Jane Smith",
-    "email": "jane@example.com",
-    "phone": "4255550100",
-    "zip": "98052"
-  },
-  "quiz_answers": {
-    "project_need": "New shower enclosure"
-  },
-  "attribution": {
-    "utm_source": "facebook",
-    "utm_medium": "paid",
-    "utm_campaign": "shower-glass",
-    "utm_content": "",
-    "utm_term": "",
-    "ad_id": "123456",
-    "adset_id": "789012",
-    "campaign_id": "345678",
-    "fbclid": "TESTCLID",
-    "fbp": "fb.1.example",
-    "fbc": "fb.1.example.TESTCLID",
-    "source_url": "https://client-elite-glass-window-quiz.pages.dev/b#contact",
-    "user_agent": "Mozilla/5.0 ...",
-    "lead_event_id": "evt_1234567890_example"
-  },
-  "sms_consent": true
-}
-```
-
-Confirm delivery using the receiving platform's execution log and a real test submission.
+A protected synthetic request carries `x-elite-test-auth`. The relay signs its event ID, timestamp, and route with `ELITE_TEST_SIGNING_KEY`; the Client App verifies the signature and replies `test: true` without inserting a lead or dispatching the router. A public `sample_record` marker cannot authorize this path. Use synthetic contact values only. Duplicate test event IDs return `duplicate: true`. Verify both the Make execution and receiver receipt, then confirm that lead, booking, alert, call, and notification counts have not changed.
 
 ## Contact Consent
 
@@ -309,7 +275,7 @@ Keep the automated-technology, consent-not-required, message/data-rate, `STOP`, 
 This repository is already connected to Cloudflare Pages. Normal release flow:
 
 ```powershell
-git add README.md config.js index.html b c assets privacy-policy terms legal.css _redirects
+git add README.md .env.example .gitignore package.json scripts config.js index.html b c assets functions test privacy-policy terms legal.css _redirects _headers
 git commit -m "Describe the change"
 git push origin main
 ```
@@ -324,19 +290,20 @@ Only stage files that are intentionally part of the release. After pushing, veri
 - [x] Google rating summary and selected customer reviews
 - [x] Same-site Privacy Policy and Terms & Conditions pages
 - [x] Microsoft Clarity project ID
-- [x] Lead webhook URL
+- [x] Server-side Make webhook secret and receipt-gated relay
 - [x] Worker provider secrets
 - [ ] Publish the Retell prompt from `lead-router/AGENT_PROMPT.md`
 - [ ] Controlled immediate-call smoke test using an authorized phone
 - [x] Meta Pixel ID
-- [ ] Real end-to-end lead delivery test
-- [x] Meta server PageView and Lead Test Events received; browser PageView and shared event IDs verified
+- [x] Signed synthetic lead delivery through Make and Client App on all five routes without a lead or notification
+- [ ] Authorized production lead acceptance test
+- [x] Meta Test Events received for all quiz events, Schedule, and Purchase; shared Pixel/CAPI IDs verified
 - [x] Desktop and mobile visual acceptance after the final deployment
 
 ## Important Operational Notes
 
 - `config.js` is the canonical configuration file; do not rename it to `CONFIG.js`.
-- Empty tracking or webhook values disable those integrations safely.
+- Missing server secrets make lead delivery fail closed.
 - A thank-you screen does not prove that an empty or misconfigured webhook delivered the lead.
 - Static endpoint checks do not replace a real browser submission and receiver-side verification.
 - Keep generated project imagery local unless a deliberate asset migration is planned.

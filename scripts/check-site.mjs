@@ -8,6 +8,7 @@ const config = await readFile(new URL("config.js", root), "utf8");
 const capi = await readFile(new URL("functions/api/capi.js", root), "utf8");
 const redirects = await readFile(new URL("_redirects", root), "utf8");
 const rootRoute = await readFile(new URL("index.html", root), "utf8");
+const routeA = await readFile(new URL("a/index.html", root), "utf8");
 const privacyPolicy = await readFile(new URL("privacy-policy/index.html", root), "utf8");
 const terms = await readFile(new URL("terms/index.html", root), "utf8");
 const headers = await readFile(new URL("_headers", root), "utf8");
@@ -103,12 +104,12 @@ for (const needle of [
   "Multiple showers or units",
   "consent_method: 'submit_implied'",
   "sms_consent: true",
-  "fetch('/api/capi'",
-  "capi_event_name: 'Lead'",
-  "capi_event_time: Math.floor(Date.now() / 1000)",
-  "capi_action_source: 'website'",
-  "fbq('track', 'PageView'",
-  "fbq('track', 'Lead'",
+  "window.createEliteMeta({ route: '/b', variant: 'B' })",
+  "fetch('/api/lead'",
+  "meta.button('estimate_start'",
+  "meta.button('contact_stage'",
+  "meta.button('submit_intent'",
+  "meta.lead(leadEventId",
   "fbq('set', 'autoConfig', false, C.metaPixelId)",
   "loadClarity();",
   "clarity('set', 'funnelStep', label)",
@@ -134,6 +135,8 @@ if ((config.match(/\{ label: "Contractor", icon: "hard-hat" \}/g) || []).length 
   throw new Error("Contractor must remain configured once in route /c only.");
 }
 if (!redirects.includes("/b  /b/  301") || redirects.includes("/b/ /index.html")) throw new Error("Route /b redirect is not isolated.");
+if (!redirects.includes("/a  /a/  301") || redirects.includes("/a  /index.html")) throw new Error("Route /a must keep its own pathname.");
+if (routeA !== rootRoute) throw new Error("Route /a page must mirror the root quiz markup.");
 
 for (const needle of [
   "Window Replacement & Installation",
@@ -155,12 +158,12 @@ for (const needle of [
   "route: routePath",
   "quiz_path_${variantSlug}",
   "quiz_${variantSlug}_",
-  "fetch('/api/capi'",
-  "capi_event_name: 'Lead'",
-  "capi_event_time: Math.floor(Date.now() / 1000)",
-  "capi_action_source: 'website'",
-  "fbq('track', 'PageView'",
-  "fbq('track', 'Lead'",
+  "window.createEliteMeta({ route: routePath, variant })",
+  "fetch('/api/lead'",
+  "meta.button('estimate_start'",
+  "meta.button('contact_stage'",
+  "meta.button('submit_intent'",
+  "meta.lead(leadEventId",
   "#step-1-property-type",
   "#step-2-homeowner-project",
   "#step-2-business-project",
@@ -224,27 +227,24 @@ if (!redirects.includes("/privacy-policy  /privacy-policy/  301") || !redirects.
 }
 
 for (const needle of [
-  "fbq('track', 'PageView', {}, { eventID: pageEventId })",
-  "event_name: 'PageView'",
-  "event_name: 'Lead'",
-  "fetch('/api/capi'",
-  "capi_event_name: 'Lead'",
-  "capi_event_time: Math.floor(Date.now() / 1000)",
-  "capi_action_source: 'website'",
-  "sample_record",
-  "TEST ONLY - ${C.businessName} Quiz",
+  "window.createEliteMeta({ route: routePath, variant: funnelVariant.toUpperCase() })",
+  "fetch('/api/lead'",
+  "meta.button('estimate_start'",
+  "meta.button('contact_stage'",
+  "meta.button('submit_intent'",
+  "meta.lead(attribution.lead_event_id",
 ]) {
   if (!rootRoute.includes(needle)) throw new Error(`Missing root /a tracking behavior: ${needle}`);
 }
 
-for (const [label, route] of [["/b", routeB], ["/c and /d", routeC]]) {
-  for (const needle of ["sample_record", "TEST ONLY - ${C.businessName} Quiz"]) {
-    if (!route.includes(needle)) throw new Error(`Missing ${label} test labeling behavior: ${needle}`);
+for (const [label, route] of [["root", rootRoute], ["/b", routeB], ["/c and /d", routeC]]) {
+  if (route.includes("?make_test=") || route.includes("?sample_record=")) {
+    throw new Error(`${label} must not accept public test-mode query flags.`);
   }
 }
 
 for (const needle of [
-  'new Set(["PageView", "Lead"])',
+  'new Set(["PageView", "FunnelStep", "ButtonClick", "Lead"])',
   "META_CAPI_ACCESS_TOKEN",
   "META_TEST_EVENT_CODE",
   "META_TEST_AUTH",

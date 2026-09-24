@@ -293,7 +293,6 @@ window.CONFIG = {
   // Add live values before launch. Empty values safely disable these integrations.
   clarityId: "yadrhyi60g",
   metaPixelId: "1072168465554731",
-  webhookUrl: "https://hook.us2.make.com/qxerkrrp1yt9b7jl76z82mlfzi3uop3m",
   leadRouterUrl: "",
   smsConsentText: "I agree to receive calls and SMS messages from {businessName} about my estimate request. Consent is not a condition of purchase. Message frequency varies. Message & data rates may apply. Reply STOP to unsubscribe or HELP for help.",
   footerLinks: [

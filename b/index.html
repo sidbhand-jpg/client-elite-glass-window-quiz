@@ -11,6 +11,7 @@
   <link rel="preload" href="/assets/fonts/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="/assets/fonts/fonts.css"></noscript>
   <script defer src="/config.js"></script>
+  <script defer src="/assets/meta-events.js"></script>
   <script defer src="/assets/vendor/lucide-0.468.0.min.js?v=2"></script>
   <style>
     :root {
@@ -197,6 +198,7 @@
     'use strict';
     const C = window.CONFIG || {};
     const B = C.routeB || {};
+    const meta = window.createEliteMeta({ route: '/b', variant: 'B' });
     const answers = {};
     const trackedClaritySteps = new Set();
     let currentStep = 1;
@@ -301,6 +303,7 @@
       const label = hash.replace(/^#/, '');
       const eventName = `quiz_b_${label.replace(/-/g, '_')}`;
       if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+      meta.step(label, { content_category: answers.project_need || '', answer_choice: answers.project_need || '' });
       if (!window.clarity) return;
       clarity('set', 'funnelStep', label);
       if (!trackedClaritySteps.has(eventName)) {
@@ -309,22 +312,9 @@
       }
     }
 
-    async function sendCapi(input) {
-      const response = await fetch('/api/capi', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(input),
-        keepalive: true,
-      });
-      if (!response.ok) throw new Error(`CAPI ${response.status}`);
-      return response.json();
-    }
-
     function trackPageView() {
-      const id = eventId('page');
       ensureMetaPixel();
-      if (window.fbq) fbq('track', 'PageView', {}, { eventID: id });
-      sendCapi({ event_name: 'PageView', event_id: id, ...attribution() }).catch((error) => console.warn('PageView CAPI failed', error.message));
+      meta.pageView();
     }
 
     function setStep(step) {
@@ -349,6 +339,8 @@
       if (window.lucide) lucide.createIcons({ root: content });
       content.querySelectorAll('.option').forEach((button) => {
         button.addEventListener('click', () => {
+          meta.button('estimate_start', '#step-1-shower-project');
+          meta.button('contact_stage', '#step-1-shower-project');
           answers[question.id] = button.dataset.value;
           button.classList.add('selected');
           setTimeout(renderForm, 160);
@@ -399,12 +391,14 @@
     }
 
     async function postWebhook(payload) {
-      if (!C.webhookUrl) return;
-      await fetch(C.webhookUrl, {
+      const response = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(payload),
       });
+      const receipt = await response.json().catch(() => ({}));
+      if (!response.ok || receipt.accepted !== true) throw new Error('Lead intake did not confirm receipt');
+      return receipt;
     }
 
     async function handleSubmit(event) {
@@ -428,7 +422,8 @@
       button.textContent = 'Sending…';
 
       const fields = Object.fromEntries(new FormData(form).entries());
-      const tracking = attribution();
+      meta.button('submit_intent', '#step-2-contact');
+      const tracking = { ...attribution(), ...meta.context() };
       const leadEventId = eventId('lead');
       const submittedAt = new Date().toISOString();
       const capiAttribution = {
@@ -437,11 +432,9 @@
         capi_event_time: Math.floor(Date.now() / 1000),
         capi_action_source: 'website',
       };
-      const isTest = new URLSearchParams(location.search).get('sample_record') === '1'
-        || new URLSearchParams(location.search).get('make_test') === '1';
       const payload = {
         business: C.businessName,
-        lead_source: isTest ? `TEST ONLY - ${C.businessName} Quiz /b` : `${C.businessName} Quiz /b`,
+        lead_source: `${C.businessName} Quiz /b`,
         funnel_variant: 'B',
         route: '/b',
         submitted_at: submittedAt,
@@ -455,7 +448,6 @@
         marketing_consent: true,
         consent_method: 'submit_implied',
         consent_copy: String(B.form.consentText || '').replace('{businessName}', C.businessName || ''),
-        sample_record: isTest,
         lead_event_id: leadEventId,
         ...capiAttribution,
         ...tracking,
@@ -464,17 +456,18 @@
         attribution: { ...tracking, lead_event_id: leadEventId, ...capiAttribution },
       };
 
-      loadMetaPixel();
-      if (window.fbq) fbq('track', 'Lead', {}, { eventID: leadEventId });
-      const deliveries = await Promise.allSettled([
-        sendCapi({ event_name: 'Lead', event_id: leadEventId, ...fields, ...answers, ...tracking }),
-        postWebhook(payload),
-      ]);
-      deliveries.forEach((result, index) => {
-        if (result.status === 'rejected') console.warn(index === 0 ? 'Lead CAPI failed' : 'Lead webhook failed', result.reason?.message || result.reason);
-      });
-
-      renderThanks();
+      try {
+        const receipt = await postWebhook(payload);
+        loadMetaPixel();
+        meta.lead(leadEventId, fields, answers);
+        renderThanks();
+      } catch (error) {
+        console.warn('Lead submission failed', error.message);
+        form.querySelector('#form-error').textContent = 'We could not send your request. Please try again.';
+        button.disabled = false;
+        button.textContent = B.form?.ctaLabel || 'Request my free estimate';
+        submitting = false;
+      }
     }
 
     function renderThanks() {
@@ -491,9 +484,11 @@
     }
 
     if (window.lucide) lucide.createIcons();
+    ensureMetaPixel();
     ensureClarity();
     renderProjectQuestion();
     window.addEventListener('load', () => {
+      loadMetaPixel();
       trackPageView();
       let trackingLoadTimer = window.setTimeout(() => {
         loadMetaPixel();
