@@ -261,6 +261,18 @@ window.CONFIG = {
     },
     bottomHeadline: "See Which Windows Fit Your Project",
     bottomCopy: "Tell us about your property and window needs. Our team will confirm product options, measurements, and complete installed pricing.",
+    questions: {
+      project: {
+        id: "project_need",
+        label: "What window project do you need?",
+        options: [
+          { label: "New window installation", icon: "square-plus" },
+          { label: "Window replacement", icon: "refresh-cw" },
+          { label: "Multiple windows or units", icon: "layers-3" },
+          { label: "Repair or replace", icon: "wrench" }
+        ]
+      }
+    },
     form: {
       eyebrow: "Free window estimate",
       headline: "See Which Options Fit Your Project",

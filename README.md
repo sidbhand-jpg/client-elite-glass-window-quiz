@@ -61,7 +61,7 @@ Route `/b` asks one required shower-project question: New shower enclosure, Repl
 
 Route `/c` follows the same conditional flow for windows. Homeowners choose New window installation or Window replacement; property managers, contractors, and commercial visitors choose New window installation, Multiple windows or units, or Repair or replace. It uses the completed Redmond window project as its hero image.
 
-Route `/d` uses the same window flow as `/c` and adds the source-backed `$300 per window*` offer. Its visible asterisk states that the starting price is for select Ply Gem window materials only; labor and installation are excluded, other products and project requirements cost more, and final pricing follows product selection and measurements. Offer details are also included in the webhook payload.
+Route `/d` starts with one window-project question and then collects contact details. It adds the source-backed `$300 per window*` offer. Its visible asterisk states that the starting price is for select Ply Gem window materials only; labor and installation are excluded, other products and project requirements cost more, and final pricing follows product selection and measurements. The selected project and offer details are included in the webhook payload.
 
 Routes `/b`, `/c`, and `/d` use submit-implied marketing consent instead of a checkbox. The disclosure remains visible immediately above the submit button, and successful payloads record `sms_consent: true`, `marketing_consent: true`, and `consent_method: submit_implied`.
 
@@ -76,7 +76,7 @@ The project includes four routes for testing different landing experiences:
 | `/a` | A | Direct landing experience without the gallery and review proof sections |
 | `/b` | B | Dedicated mobile-first two-step shower-glass funnel |
 | `/c` | C | Dedicated mobile-first window funnel with conditional audience routing |
-| `/d` | D | Route C window flow with a source-backed `$300 per window*` material-only offer |
+| `/d` | D | Two-step window-project and contact flow with a source-backed `$300 per window*` material-only offer |
 | `/` | Legacy B | Existing five-question landing experience with gallery and review proof |
 
 The active variant is included in tracking events and webhook submissions as `A`, `B`, `C`, or `D`.

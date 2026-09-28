@@ -298,7 +298,7 @@
       <p class="section-kicker">Free project estimate</p>
       <h2 id="bottom-headline">Ready for new or replacement windows?</h2>
       <p id="bottom-copy">Tell us about your property and project. Our team will follow up to discuss measurements, options, and next steps.</p>
-      <a class="cta-button" id="estimate-cta" href="#step-1-property-type">Start my estimate</a>
+      <a class="cta-button" id="estimate-cta" href="#step-1-window-project">Start my estimate</a>
     </section>
   </main>
 
@@ -322,7 +322,8 @@
     const routeC = C.routeC || {};
     const routeD = C.routeD || {};
     const V = isOfferRoute
-      ? { ...routeC, ...routeD, form: { ...(routeC.form || {}), ...(routeD.form || {}) } }
+      ? { ...routeC, ...routeD, questions: { ...(routeC.questions || {}), ...(routeD.questions || {}) },
+          form: { ...(routeC.form || {}), ...(routeD.form || {}) } }
       : routeC;
     const answers = {};
     const trackedClaritySteps = new Set();
@@ -479,8 +480,9 @@
 
     function setStep(step) {
       currentStep = step;
-      progress.style.width = `${Math.min(100, (step / 3) * 100)}%`;
-      stepLabel.textContent = step < 3 ? `Step ${step} of 3` : 'Final step';
+      const totalSteps = isOfferRoute ? 2 : 3;
+      progress.style.width = `${Math.min(100, (step / totalSteps) * 100)}%`;
+      stepLabel.textContent = step < totalSteps ? `Step ${step} of ${totalSteps}` : 'Final step';
     }
 
     function renderQuestion(question, step, canGoBack, hash) {
@@ -500,10 +502,10 @@
       content.querySelectorAll('.option').forEach((button) => {
         button.addEventListener('click', () => {
           if (step === 1 && !isOfferRoute) meta.button('estimate_start', hash.slice(1));
-          if (step === 2) meta.button('contact_stage', hash.slice(1));
+          if (isOfferRoute || step === 2) meta.button('contact_stage', hash.slice(1));
           answers[question.id] = button.dataset.value;
           button.classList.add('selected');
-          setTimeout(() => step === 1 ? renderProjectQuestion() : renderForm(), 160);
+          setTimeout(() => (isOfferRoute || step === 2) ? renderForm() : renderProjectQuestion(), 160);
         });
       });
       content.querySelector('#back-button')?.addEventListener('click', renderAudienceQuestion);
@@ -516,6 +518,10 @@
     }
 
     function renderProjectQuestion() {
+      if (isOfferRoute) {
+        renderQuestion(V.questions.project, 1, false, '#step-1-window-project');
+        return;
+      }
       const isHomeowner = answers.property_type === 'Homeowner';
       const question = isHomeowner ? V.questions.homeowner : V.questions.business;
       const hash = isHomeowner ? '#step-2-homeowner-project' : '#step-2-business-project';
@@ -523,8 +529,8 @@
     }
 
     function renderForm() {
-      setStep(3);
-      trackQuizStep('#step-3-contact');
+      setStep(isOfferRoute ? 2 : 3);
+      trackQuizStep(isOfferRoute ? '#step-2-contact' : '#step-3-contact');
       const form = V.form || {};
       const consent = String(form.consentText || '').replace('{businessName}', C.businessName || 'Elite Glass & Window');
       const labelClass = isOfferRoute ? '' : ' class="sr-only"';
@@ -614,7 +620,7 @@
         email: fields.email,
         phone: fields.phone,
         zip: fields.zip,
-        property_type: answers.property_type,
+        property_type: answers.property_type || '',
         project_need: answers.project_need,
         sms_consent: true,
         marketing_consent: true,
@@ -661,7 +667,8 @@
     if (window.lucide) lucide.createIcons();
     ensureMetaPixel();
     ensureClarity();
-    renderAudienceQuestion();
+    if (isOfferRoute) renderProjectQuestion();
+    else renderAudienceQuestion();
     window.addEventListener('load', () => {
       loadMetaPixel();
       trackPageView();
@@ -681,7 +688,7 @@
         document.getElementById('estimate-cta').addEventListener('click', (event) => {
           event.preventDefault();
           meta.button('estimate_start', 'start');
-          renderAudienceQuestion();
+          renderProjectQuestion();
           document.getElementById('quiz-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
       }
