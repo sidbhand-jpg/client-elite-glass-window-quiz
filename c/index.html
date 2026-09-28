@@ -151,7 +151,7 @@
       width: 100%; height: 52px; padding: 0 14px;
       border: 1px solid #ccd4df; border-radius: 10px; color: var(--ink); background: #fff;
     }
-    .route-c .field input::placeholder { color: #687084; opacity: 1; }
+    .field input::placeholder { color: #687084; opacity: 1; }
     .field input:focus { border-color: var(--blue); outline: 3px solid rgba(69,185,237,.16); }
     .field input.invalid { border-color: var(--danger); }
     .consent-copy { margin: 14px 0; color: #646d7e; font-size: 11px; line-height: 1.5; }
@@ -193,7 +193,7 @@
     .route-c .option:focus-visible { border-color: var(--blue); background: #f2fbff; outline: 3px solid #1479b4; outline-offset: 2px; }
     .route-c .option:active { transform: scale(.98); }
     .route-c .option svg { width: 28px; height: 28px; flex: none; }
-    .route-c .submit-button { min-height: 60px; }
+    .submit-button { min-height: 60px; }
     html:not(.route-c) .quiz-card { min-height: 360px; }
     .estimate-section { padding: 70px 20px 76px; text-align: center; }
     .section-kicker { color: var(--navy); }
@@ -519,6 +519,7 @@
 
     function renderProjectQuestion() {
       if (isOfferRoute) {
+        delete answers.project_need;
         renderQuestion(V.questions.project, 1, false, '#step-1-window-project');
         return;
       }
@@ -533,18 +534,15 @@
       trackQuizStep(isOfferRoute ? '#step-2-contact' : '#step-3-contact');
       const form = V.form || {};
       const consent = String(form.consentText || '').replace('{businessName}', C.businessName || 'Elite Glass & Window');
-      const labelClass = isOfferRoute ? '' : ' class="sr-only"';
-      const fieldPlaceholder = (label) => isOfferRoute ? '' : ` placeholder="${escapeAttr(label)}"`;
       content.innerHTML = `
-        ${isOfferRoute ? `<p class="section-kicker" style="text-align:center">${escapeHtml(form.eyebrow || 'Free estimate')}</p>` : ''}
         <h2 class="question-title" style="text-align:center;margin-top:8px">${escapeHtml(form.headline || 'Tell us where to reach you')}</h2>
         <p style="text-align:center;color:var(--muted);font-size:13px;margin:-8px 0 20px">${escapeHtml(form.subtext || '')}</p>
         <form id="lead-form" novalidate>
           <div class="contact-grid">
-            <div class="field full"><label${labelClass} for="name">Full name</label><input id="name" name="name" autocomplete="name"${fieldPlaceholder('👤 Full name')} required></div>
-            <div class="field"><label${labelClass} for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"${fieldPlaceholder('📧 Email')} required></div>
-            <div class="field"><label${labelClass} for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"${fieldPlaceholder('📞 Phone')} required></div>
-            <div class="field full"><label${labelClass} for="zip">Project ZIP code</label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10"${fieldPlaceholder('📍 Project ZIP code')} required></div>
+            <div class="field full"><label class="sr-only" for="name">Full name</label><input id="name" name="name" autocomplete="name" placeholder="👤 Full name" required></div>
+            <div class="field"><label class="sr-only" for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="📧 Email" required></div>
+            <div class="field"><label class="sr-only" for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="📞 Phone" required></div>
+            <div class="field full"><label class="sr-only" for="zip">Project ZIP code</label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10" placeholder="📍 Project ZIP code" required></div>
           </div>
           <p class="consent-copy">${escapeHtml(consent)} See our <a href="${escapeAttr(privacyLink)}" target="_blank" rel="noopener">Privacy Policy</a> and <a href="${escapeAttr(termsLink)}" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p>
           <p class="form-error" id="form-error" role="alert"></p>
@@ -600,7 +598,7 @@
       button.textContent = 'Sending…';
 
       const fields = Object.fromEntries(new FormData(form).entries());
-      meta.button('submit_intent', '#contact');
+      meta.button('submit_intent', isOfferRoute ? '#step-2-contact' : '#contact');
       const tracking = { ...attribution(), ...meta.context() };
       const leadEventId = eventId('lead');
       const submittedAt = new Date().toISOString();

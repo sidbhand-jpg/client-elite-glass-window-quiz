@@ -274,8 +274,7 @@ window.CONFIG = {
       }
     },
     form: {
-      eyebrow: "Free window estimate",
-      headline: "See Which Options Fit Your Project",
+      headline: "Tell us where to reach you",
       subtext: "Elite Glass & Window will confirm product eligibility, measurements, and complete installed pricing.",
       consentText: "By submitting, you agree to receive marketing calls and text messages from {businessName}, including by automated technology. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help."
     }
