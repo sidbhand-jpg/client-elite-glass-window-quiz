@@ -248,7 +248,11 @@
       .brand-logo { width: 180px; }
       .quiz-card { padding: 23px 18px; }
     }
+    @media (max-width: 450px) {
+      html:not(.route-c) .hero-copy { min-height: 239px; }
+    }
     @media (max-width: 370px) {
+      html:not(.route-c) .hero-copy { min-height: 263px; }
       html:not(.route-c) .quiz-card { min-height: 370px; }
     }
     @media (max-width: 700px) {
