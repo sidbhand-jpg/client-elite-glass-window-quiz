@@ -197,6 +197,21 @@ if (!redirects.includes("/d  /d/  301") || !redirects.includes("/d/*  /c/:splat 
   throw new Error("Route /d must resolve to the shared Windows funnel without changing the public /d URL.");
 }
 
+const configSandbox = { window: {} };
+new Script(config, { filename: "config.js" }).runInNewContext(configSandbox);
+const offerRoute = configSandbox.window.CONFIG.routeD;
+const offerTrustPoints = configSandbox.window.CONFIG.routeC.trustPoints;
+for (const firstPaintContent of [
+  `id="hero-eyebrow">${offerRoute.eyebrow}</p>`,
+  `id="hero-headline">${offerRoute.headline}<sup class="offer-asterisk">*</sup></h1>`,
+  `id="hero-subheadline">${offerRoute.subheadline}</p>`,
+  ...offerTrustPoints.map((point) => `<li>${point}</li>`),
+]) {
+  if (!routeC.includes(firstPaintContent)) {
+    throw new Error(`Route /d first-paint hero content is out of sync with config.js: ${firstPaintContent}`);
+  }
+}
+
 for (const needle of [
   '{ label: "Privacy Policy", href: "/privacy-policy/" }',
   '{ label: "Terms & Conditions", href: "/terms/" }',
